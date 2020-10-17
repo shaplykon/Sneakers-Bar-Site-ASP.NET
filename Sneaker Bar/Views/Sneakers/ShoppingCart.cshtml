@@ -9,7 +9,7 @@ else
 {
     foreach (Sneakers sneakers in ViewBag.sneakers)
     {
-<div class="card w-25">
+<div class="card w-25" style="margin-bottom: 30px;">
     <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(sneakers.ImageData))" />
     <div class="card-body">
         <h5 class="card-title">
