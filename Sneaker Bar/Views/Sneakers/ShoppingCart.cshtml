@@ -1,0 +1,40 @@
+﻿@model Sneaker_Bar.Models.Sneakers
+
+@if (ViewBag.sneakers.Count == 0)
+{
+    <a class="font-weight-bold">Your shopping cart is empy</a>
+}
+
+else
+{
+    foreach (Sneakers sneakers in ViewBag.sneakers)
+    {
+<div class="card w-25">
+    <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(sneakers.ImageData))" />
+    <div class="card-body">
+        <h5 class="card-title">
+            @sneakers.Company
+            @sneakers.Model
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            @sneakers.ReleaseDate.ToShortDateString()
+        </h6>
+        <div class="card-text font-weight-bold">
+            @sneakers.Price$
+        </div>
+
+
+        <form method="post" asp-controller="Sneakers" asp-action="DeleteFromShoppingCart">
+            <input type="hidden" value="@sneakers.Id" name="Id" />
+            <input style="margin:auto" type="submit" asp-controller="Sneakers" asp-action="DeleteFromShoppingCart" class="btn btn-danger" value="Delete from shopping cart">
+        </form>
+
+
+    </div>
+    <div class="card-footer">
+        <a asp-controller="Sneakers" asp-action="SneakersDetail" asp-route-id="@sneakers.Id">Detail</a>
+    </div>
+</div>
+    }
+
+}

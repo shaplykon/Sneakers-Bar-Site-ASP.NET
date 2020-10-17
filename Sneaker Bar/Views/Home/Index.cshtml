@@ -1,0 +1,59 @@
+﻿@model IQueryable<Sneaker_Bar.Models.Sneakers>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (User.IsInRole("admin"))
+{
+    <div class="text-center">
+        <a asp-controller="Home" asp-action="SneakersEdit">Add snickers</a>
+    </div>
+
+}
+
+<div class="card-deck deck-index">
+
+
+    @foreach (Sneakers sneakers in Model)
+    {
+        <div class="card w-25" style=" margin-left: 45px; margin-right: 45px; margin-bottom: 20px;">
+            <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(sneakers.ImageData))" />
+            <div class="card-body">
+
+                <h4 class="card-title font-weight-bold">
+                    @sneakers.Company
+                    @sneakers.Model
+                </h4>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <!--style="position:absolute; bottom:15%; left:35%;"-->
+                    @sneakers.ReleaseDate.ToShortDateString()
+                </h6>
+                <h4 class="card-text font-weight-bold">
+                    <!--style="position:absolute; bottom:20%;left:40%;"-->
+                    @sneakers.Price$
+                </h4>
+
+                @if (User.IsInRole("admin") || User.IsInRole("manager"))
+                {
+                    <form method="get" asp-controller="Home" asp-action="SneakersEdit" asp-route-sneakersId="@sneakers.Id">
+                        <input type="hidden" value="@sneakers.Id" name="id" />
+                        <input type="submit" class="badge-dark" value="Edit" />
+                    </form>
+
+                    <form method="post" asp-controller="Home" asp-action="SneakersDelete" asp-route-sneakersId="@sneakers.Id">
+                        <input type="hidden" value="@sneakers.Id" name="id" />
+                        <input type="submit" class="badge-dark" value="Delete" />
+                    </form>
+                }
+
+            </div>
+            <div class="card-footer">
+                <a class="card-link" asp-controller="Sneakers" asp-action="SneakersDetail" asp-route-id="@sneakers.Id">Detail</a>
+            </div>
+
+        </div>
+
+
+    }
+</div>
+

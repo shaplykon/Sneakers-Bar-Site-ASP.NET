@@ -1,0 +1,53 @@
+﻿@model Sneaker_Bar.Models.Sneakers
+@{
+    ViewData["Title"] = "Sneakers detail";
+}
+
+<div class="row">
+
+    <div class="col"><h1>@ViewBag.sneakers.Company @ViewBag.sneakers.Model</h1></div>
+
+    <div class="col">
+        @{if (User.IsInRole("user") || !User.Identity.IsAuthenticated)
+            {
+                @if (ViewBag.isInCart)
+                {
+                    <form method="post" asp-controller="Sneakers" asp-action="AddToShoppingCart" asp-route-id="@ViewBag.sneakers.Id">
+                        <input type="hidden" value="@ViewBag.sneakers.Id" name="Id" />
+                        <input asp-route-sneakersId="@ViewBag.sneakers.Id" class="btn btn-danger right" type="submit" asp-controller="Sneakers" asp-action="AddToShoppingCart" value="Delete from shopping cart">
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-controller="Sneakers" asp-action="AddToShoppingCart" asp-route-id="@ViewBag.sneakers.Id">
+                        <input type="hidden" value="@ViewBag.sneakers.Id" name="Id" />
+                        <input asp-route-sneakersId="@ViewBag.sneakers.Id" class="btn btn-success right" type="submit" asp-controller="Sneakers" asp-action="AddToShoppingCart" value="Add to shopping cart">
+                    </form>
+                }
+            }
+        }
+    </div>
+</div>
+
+<img class="img-thumbnail detail-img" src="data:image/jpeg;base64,@(Convert.ToBase64String(ViewBag.sneakers.ImageData))" />
+<h4>Price: @ViewBag.sneakers.Price$</h4>
+<h4>Release date: @ViewBag.sneakers.ReleaseDate.ToShortDateString()</h4>
+<!--
+<div class="media-block" style="margin-top:20px">
+    <a class="media-left"><img class="img-circle img-sm" style="width:50px; height:50px" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/1.png"></a>
+    <div class="media-body">
+        <div class="mar-btm">
+            <a class="btn-link text-semibold media-heading box-inline">Максим</a>
+            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> @DateTime.Now</p>
+        </div>
+        <p>Comment example!</p>
+        <div class="pad-ver">
+            <div class="btn-group">
+                <a class="btn btn-sm btn-default btn-hover-success"><i class="fa fa-thumbs-up"></i></a>
+                <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+    -->
