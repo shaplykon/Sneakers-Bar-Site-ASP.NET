@@ -35,22 +35,29 @@
             <span asp-validation-for="ReleaseDate"></span>
         </div>
 
+
         <div class="form-group row">
+            <label class="col-sm-2 col-form-label" asp-for=ImageData></label>
             <div class="col-sm-6">
-                <input type="file" class="form-control" name="image" />
+                <input type="file" class="form-control" asp-for="ImageData" />
+            </div>
+            <span asp-validation-for="ImageData" class="text-danger"></span>
+        </div>
+
+
+        @if (Model != null && Model.ImageData != null)
+        {
+            <div class="col-sm-8">
+                <img class="img-thumbnail" src="~/images/@Model.ImageData"
+                     asp-append-version="true" id="imageInput" />
+            </div>
+        }
+        <div class="col-sm-8">
+            <div class="form-group row"> 
+                <input type="submit" value="Save" class ="btn btn-primary" style="margin-top:10px; margin:auto" />
             </div>
         </div>
 
-        @if (Model.ImageData == null)
-        {
-            <a class="font-weight-bold">Изображение отсуствует</a>
-        }
-        else
-        {
-            <img class="img-thumbnail" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.ImageData))" />
-        }
 
-
-        <input type="submit" value="Save" />
     </form>
 </div>

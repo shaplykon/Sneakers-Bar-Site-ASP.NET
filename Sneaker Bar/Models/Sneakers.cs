@@ -9,10 +9,21 @@ namespace Sneaker_Bar.Models
     public class Sneakers
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Please input price")]
         public double Price { get; set; }
+
+        [Required(ErrorMessage = "Please input model")]
         public string Model { get; set; }
+
+        [Required(ErrorMessage = "Please input company")]
         public string Company { get; set; }
+
+        [Required(ErrorMessage = "Please choose date")]
         public DateTime ReleaseDate { get; set; }
-        public byte[] ImageData { get; set; }
+
+        [Required(ErrorMessage = "Please choose image")]
+        [Display(Name = "Sneakers Picture")]
+        public string ImageData { get; set; }
     }
 }

@@ -109,3 +109,7 @@ h4 {
     display: -webkit-box;
 }
 
+input .btn-primary {
+    margin:auto;
+    margin-top:10px;
+}

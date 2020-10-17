@@ -17,7 +17,7 @@
     @foreach (Sneakers sneakers in Model)
     {
         <div class="card w-25" style=" margin-left: 45px; margin-right: 45px; margin-bottom: 20px;">
-            <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(sneakers.ImageData))" />
+            <img class="card-img-top" src="~/images/@sneakers.ImageData" />
             <div class="card-body">
 
                 <h4 class="card-title font-weight-bold">

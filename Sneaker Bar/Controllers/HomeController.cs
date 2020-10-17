@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Sneaker_Bar.Models;
+using Sneaker_Bar.ViewModels;
+using System;
 using System.IO;
 
 namespace Sneaker_Bar.Controllers
@@ -8,49 +10,71 @@ namespace Sneaker_Bar.Controllers
     public class HomeController : Controller
     {
 
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly SneakersRepository sneakersRepository;
 
-        public HomeController(SneakersRepository _sneakersRepository) {
+        public HomeController(SneakersRepository _sneakersRepository, IWebHostEnvironment _webHostEnvironment)
+        {
             sneakersRepository = _sneakersRepository;
+            webHostEnvironment = _webHostEnvironment;
         }
 
-        public ActionResult Index() {
-            var model = sneakersRepository.GetSneakers();    
+        public ActionResult Index()
+        {
+            var model = sneakersRepository.GetSneakers();
             return View(model);
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
         [HttpGet]
-        public IActionResult SneakersEdit(int id) {
-            Sneakers sneakers = id == 0 ? 
-                new Sneakers() : 
-                sneakersRepository.GetSneakersById(id);
-            return View(sneakers);        
+        public IActionResult SneakersEdit(int id)
+        {
+            Sneakers sneakers = id == 0 ?
+                new Sneakers() :
+                sneakersRepository.GetSneakersById(id);            
+            return View(sneakers);
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
         [HttpPost]
-        public IActionResult SneakersEdit(Sneakers sneakers, IFormFile image) {
-            if (image != null)
+        public IActionResult SneakersEdit(SneakersViewModel viewModel)
+        {
+            if (ModelState.IsValid)
             {
-                byte[] imageData = null;
-                using (var binaryReader = new BinaryReader(image.OpenReadStream()))
+                string uniqueFileName = UploadedFile(viewModel);
+
+                Sneakers sneakers = new Sneakers
                 {
-                    imageData = binaryReader.ReadBytes((int)image.Length);
-                }
-                sneakers.ImageData = imageData;
+                    Id = viewModel.Id,
+                    Company = viewModel.Company,
+                    Model = viewModel.Model,
+                    Price = viewModel.Price,
+                    ReleaseDate = viewModel.ReleaseDate,
+                    ImageData = uniqueFileName,
+                };
+                sneakersRepository.SaveSneakers(sneakers);
+                return RedirectToAction(nameof(Index));
             }
 
 
-          //  if (ModelState.IsValid)
-           // {
-                
-               sneakersRepository.SaveSneakers(sneakers);
+            return View((Sneakers)viewModel);
+        }
 
+        private string UploadedFile(SneakersViewModel model)
+        {
+            string uniqueFileName = null;
 
-                return RedirectToAction("Index");
-          //  }
-            return View(sneakers);
+            if (model.ImageData != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageData.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ImageData.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
