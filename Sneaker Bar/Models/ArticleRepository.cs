@@ -16,7 +16,7 @@ namespace Sneaker_Bar.Models
         public IQueryable<Article> getArticles() {
             return context.Articles.OrderBy(x => x.date);
         }
-
+         
         public int SaveArticle(Article article)
         {
             if (article.Id == default)
