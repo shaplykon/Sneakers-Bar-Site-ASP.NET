@@ -11,7 +11,7 @@ namespace Sneaker_Bar.Models
         private readonly ArticleContext context;
         public ArticleRepository(ArticleContext _context)
         {
-            context = _context;
+            context = _context; 
         }
         public IQueryable<Article> getArticles() {
             return context.Articles.OrderBy(x => x.date);
