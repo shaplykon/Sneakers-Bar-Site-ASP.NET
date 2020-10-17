@@ -8,8 +8,8 @@ namespace Sneaker_Bar.Models
 {
     public class CommentRepository
     {
-        private readonly CommentContext context;
-        public CommentRepository(CommentContext _context) {
+        private readonly ApplicationDbContext context;
+        public CommentRepository(ApplicationDbContext _context) {
             context = _context;
         }
 

@@ -1,21 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sneaker_Bar.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Design;
+
 
 namespace Sneaker_Bar
 {
@@ -42,14 +34,17 @@ namespace Sneaker_Bar
               services.AddDbContext<CommentContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
               services.AddDbContext<ArticleContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
             */
-            services.AddDbContext<PurchaseContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-            services.AddDbContext<SneakersContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-            services.AddDbContext<UserContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-            services.AddDbContext<CommentContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-            services.AddDbContext<ArticleContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
 
-             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<UserContext>();
+            services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
+
+
+            /* services.AddDbContext<SneakersContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
+             services.AddDbContext<UserContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
+             services.AddDbContext<CommentContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
+             services.AddDbContext<ArticleContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));*/
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews(mvcOtions =>
             {
@@ -99,9 +94,6 @@ namespace Sneaker_Bar
 
             app.UseMvc(routes =>
             {
-
-
-
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

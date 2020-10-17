@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Sneaker_Bar.Models
 {
@@ -15,20 +12,7 @@ namespace Sneaker_Bar.Models
         public string text { get; set; }
         public int userId { get; set; }
         public int articleId { get; set; }
+        public Article article { get; set; }
         public DateTime date { get; set; }
-    }
-
-    public class CommentContext : DbContext
-    {
-        public DbSet<Comment> Comments { get; set; }
-        public CommentContext(DbContextOptions<CommentContext> options) : base(options)
-        {
-            Database.EnsureCreated();
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

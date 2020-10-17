@@ -73,9 +73,9 @@ namespace Sneaker_Bar.Controllers
                 purchaseRepository.SavePurchase(
                 new Purchase
                 {
-                    PurchaseId = 0,
-                    UserId = userId,
-                    SneakersId = sneakersId,
+                    purchaseId = 0,
+                    userId = userId,
+                    sneakersId = sneakersId,
                     //isConfirmed = false,
                     Date = DateTime.Now,
 
@@ -92,7 +92,7 @@ namespace Sneaker_Bar.Controllers
             List<Sneakers> sneakers = new List<Sneakers>();
             foreach (Purchase purchase in purchases)
             {
-                sneakers.Add(sneakersRepository.GetSneakersById(purchase.SneakersId));
+                sneakers.Add(sneakersRepository.GetSneakersById(purchase.sneakersId));
             }
             ViewBag.sneakers = sneakers;
             return View();

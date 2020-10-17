@@ -12,8 +12,8 @@ namespace RolesApp.Controllers
 {
     public class AccountController : Controller
     {
-        private UserContext _context;
-        public AccountController(UserContext context)
+        private ApplicationDbContext _context;
+        public AccountController(ApplicationDbContext context)
         {
             _context = context;
         }

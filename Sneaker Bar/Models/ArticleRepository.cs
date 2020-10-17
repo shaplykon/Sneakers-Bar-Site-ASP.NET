@@ -8,8 +8,8 @@ namespace Sneaker_Bar.Models
 {
     public class ArticleRepository
     {
-        private readonly ArticleContext context;
-        public ArticleRepository(ArticleContext _context)
+        private readonly ApplicationDbContext context;
+        public ArticleRepository(ApplicationDbContext _context)
         {
             context = _context; 
         }

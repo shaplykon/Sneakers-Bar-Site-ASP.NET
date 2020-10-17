@@ -6,9 +6,9 @@ namespace Sneaker_Bar.Models
 {
     public class PurchaseRepository
     {
-        private readonly PurchaseContext context;
+        private readonly ApplicationDbContext context;
 
-        public PurchaseRepository(PurchaseContext _context)
+        public PurchaseRepository(ApplicationDbContext _context)
         {
             context = _context;
         }
@@ -20,23 +20,23 @@ namespace Sneaker_Bar.Models
 
         public IQueryable<Purchase> GetPurchaseByUserId(int Id)
         {
-            return context.Purchases.Where(x => x.UserId == Id);
+            return context.Purchases.Where(x => x.userId == Id);
         }
 
         public IQueryable<Purchase> GetPurchaseBySneakersId(int Id)
         {
-            return context.Purchases.Where(x => x.SneakersId == Id);
+            return context.Purchases.Where(x => x.sneakersId == Id);
         }
 
         public bool IsInPurchases(int userId, int sneakersId) {
-            IQueryable<Purchase> purchase = context.Purchases.Where(x => x.SneakersId == sneakersId && x.UserId == userId);
+            IQueryable<Purchase> purchase = context.Purchases.Where(x => x.sneakersId == sneakersId && x.userId == userId);
             if (purchase.Count() == 0) return false;
             else return true;
         }
 
         public int SavePurchase(Purchase purchase)
         {
-            if (purchase.PurchaseId == default)
+            if (purchase.purchaseId == default)
             {
                 context.Entry(purchase).State = EntityState.Added;
             }
@@ -45,7 +45,7 @@ namespace Sneaker_Bar.Models
                 context.Entry(purchase).State = EntityState.Modified;
             }
             context.SaveChanges();
-            return purchase.PurchaseId;
+            return purchase.purchaseId;
         }
 
         public void DeletePurchase(Purchase purchase)
@@ -56,7 +56,7 @@ namespace Sneaker_Bar.Models
 
         public void DeletePurchaseById(int userId, int sneakersId)
         {
-            Purchase purchase = context.Purchases.Where(x => x.SneakersId == sneakersId && x.UserId == userId).SingleOrDefault();
+            Purchase purchase = context.Purchases.Where(x => x.sneakersId == sneakersId && x.userId == userId).SingleOrDefault();
             context.Purchases.Remove(purchase);
             context.SaveChanges();
         }

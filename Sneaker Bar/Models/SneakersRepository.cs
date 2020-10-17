@@ -5,9 +5,9 @@ namespace Sneaker_Bar.Models
 {
     public class SneakersRepository
     {
-        private readonly SneakersContext context;
+        private readonly ApplicationDbContext context;
 
-        public SneakersRepository(SneakersContext _context) {
+        public SneakersRepository(ApplicationDbContext _context) {
             context = _context;
         }
 
