@@ -1,8 +1,6 @@
 ﻿@model Sneaker_Bar.Models.Comment
 
-@{
-    ViewData["Title"] = "Sneakers detail";
-}
+
 <div class="row">
     <h1>@ViewBag.Article.Title</h1>
 </div>
@@ -24,7 +22,7 @@
 </div>
 
 
-<form method="post" style="margin-top:20px;">
+<form  asp-controller="Article" asp-action="CommentAdd" method="post" style="margin-top:20px;">
 
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" asp-for="Title"></label>
@@ -44,13 +42,11 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"></label>
         <div class="col-sm-6">
-            <input type="submit" class="form-control" value="Send comment" asp-route-articleId="@ViewBag.Article.Id" asp-controller="Article" asp-action="CommentAdd">
+            <input id="load" type="submit" class="form-control" value="Send comment" asp-route-articleId="@ViewBag.Article.Id" asp-controller="Article" asp-action="CommentAdd">
         </div>
     </div>
 
 </form>
-
-
 
 @{ if (ViewBag.Comments != null)
     {
@@ -62,19 +58,21 @@
                     <div class="media-body">
                         <div class="mar-btm">
                             <a class="btn-link text-semibold media-heading box-inline">User ID: @comment.UserId</a>
-                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> @DateTime.Now</p>
+                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> @comment.Date</p>
                             <h4>@comment.Title</h4>
                         </div>
                         <p>@comment.Text</p>
                         <!-- <div class="pad-ver">
-         <div class="btn-group">
-             <a class="btn btn-sm btn-default btn-hover-success"><i class="fa fa-thumbs-up"></i></a>
-             <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
-         </div>
-     </div>-->
-                        @{ if (comment.UserId == int.Parse(User.Identity.Name))
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-default btn-hover-success"><i class="fa fa-thumbs-up"></i></a>
+                                <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
+                            </div>
+                        </div>-->
+                        @{ if (User.Identity.IsAuthenticated && comment.UserId == int.Parse(User.Identity.Name))
                             {
-                                <a asp-controller="Article" asp-action="DeleteComment" asp-route-Id="@comment.Id">Delete</a>
+                                <form method="post" asp-controller="Article" asp-action="DeleteComment" asp-route-articleId="@ViewBag.Article.Id" asp-route-commentId="@comment.Id">
+                                    <input type="submit" value="Delete">
+                                </form>
                             }}
                     </div>
                 </div>
@@ -87,5 +85,3 @@
         <a>Comments: 0 </a>
     }
 }
-
-

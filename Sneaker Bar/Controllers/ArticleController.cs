@@ -94,5 +94,11 @@ namespace Sneaker_Bar.Controllers
             }
             return RedirectToAction("ArticleDetail", new { Id = articleId });
         }
+        [HttpPost]
+        public IActionResult DeleteComment(int commentId, int articleId)
+        {
+            commentRepository.DeleteCommentById(commentId);
+            return RedirectToAction("ArticleDetail", new { Id = articleId });
+        }
     }
 }

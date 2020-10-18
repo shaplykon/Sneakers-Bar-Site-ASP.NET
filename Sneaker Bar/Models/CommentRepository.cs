@@ -20,6 +20,11 @@ namespace Sneaker_Bar.Model
             return context.Comments.Where(x => x.ArticleId == Id);
         }
 
+        public Comment getCommentById(int Id)
+        {
+            return context.Comments.Where(x => x.Id == Id).FirstOrDefault();
+        }
+
         public int SaveComment(Comment comment)
         {
             if (comment.Id == default)
@@ -35,8 +40,9 @@ namespace Sneaker_Bar.Model
         }
 
 
-        public void DeleteCommentById(Comment comment)
+        public void DeleteCommentById(int commentId)
         {
+            Comment comment = getCommentById(commentId);
             context.Comments.Remove(comment);
             context.SaveChanges();
 
