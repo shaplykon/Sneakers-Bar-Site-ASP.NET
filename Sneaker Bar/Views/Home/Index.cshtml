@@ -6,7 +6,11 @@
 @if (User.IsInRole("admin"))
 {
     <div class="text-center">
-        <a asp-controller="Home" asp-action="SneakersEdit">Add snickers</a>
+        <a asp-controller="Sneakers" asp-action="SneakersEdit">Add snickers</a>
+    </div>
+
+    <div class="text-center">
+        <a asp-controller="Article" asp-action="ArticleEdit">Add article</a>
     </div>
 
 }
@@ -17,33 +21,36 @@
     @foreach (Sneakers sneakers in Model)
     {
         <div class="card w-25" style=" margin-left: 45px; margin-right: 45px; margin-bottom: 20px;">
-            <img class="card-img-top" src="~/images/@sneakers.ImageData" />
-            <div class="card-body">
+            <img class="card-img-top" src="~/images/sneakers/@sneakers.ImageData" />
+            <div class="card-body" style=" position: relative;">
 
-                <h4 class="card-title font-weight-bold">
+                <h4 class="card-title font-weight-bold" style="margin-bottom:6rem;">
                     @sneakers.Company
                     @sneakers.Model
                 </h4>
-                <h6 class="card-subtitle mb-2 text-muted">
-                    <!--style="position:absolute; bottom:15%; left:35%;"-->
+                <h6 class="card-subtitle mb-2 text-muted" style="position:absolute; bottom:80px">
                     @sneakers.ReleaseDate.ToShortDateString()
                 </h6>
-                <h4 class="card-text font-weight-bold">
-                    <!--style="position:absolute; bottom:20%;left:40%;"-->
+                <h4 class="card-text font-weight-bold" style="position:absolute; bottom:35px">
                     @sneakers.Price$
                 </h4>
 
                 @if (User.IsInRole("admin") || User.IsInRole("manager"))
                 {
-                    <form method="get" asp-controller="Home" asp-action="SneakersEdit" asp-route-sneakersId="@sneakers.Id">
-                        <input type="hidden" value="@sneakers.Id" name="id" />
-                        <input type="submit" class="badge-dark" value="Edit" />
-                    </form>
-
-                    <form method="post" asp-controller="Home" asp-action="SneakersDelete" asp-route-sneakersId="@sneakers.Id">
-                        <input type="hidden" value="@sneakers.Id" name="id" />
-                        <input type="submit" class="badge-dark" value="Delete" />
-                    </form>
+                    <div class="row" style="position:absolute; bottom:5px;">
+                        <div class="col-sm-6">
+                            <form method="get" asp-controller="Sneakers" asp-action="SneakersEdit" asp-route-sneakersId="@sneakers.Id">
+                                <input type="hidden" value="@sneakers.Id" name="id" />
+                                <input type="submit" class="badge-dark" value="Edit" />
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form method="post" asp-controller="Sneakers" asp-action="SneakersDelete" asp-route-sneakersId="@sneakers.Id">
+                                <input type="hidden" value="@sneakers.Id" name="id" />
+                                <input type="submit" class="badge-dark" value="Delete" />
+                            </form>
+                        </div>
+                    </div>
                 }
 
             </div>
@@ -57,7 +64,7 @@
     }
 </div>
 
-<div class="jumbotron" style="margin-left:30px; margin-right:35px;">
+<div class="jumbotron" style="margin-left:30px; margin-right:37px;">
     <h1 class="display-4">Hello, world!</h1>
     <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
     <hr class="my-4">

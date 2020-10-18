@@ -6,11 +6,11 @@ namespace Sneaker_Bar.Models
     [Table("purchase")]
     public class Purchase
     {
-        public int purchaseId { get; set; }
-        public int userId { get; set; }
-        public User user { get; set; }
-        public int sneakersId { get; set; }
-        public Sneakers sneakers { get; set; }
+        public int PurchaseId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public int SneakersId { get; set; }
+        public Sneakers Sneakers { get; set; }
         public DateTime Date { get; set; }
         //   public bool isConfirmed { get; set; }
     }

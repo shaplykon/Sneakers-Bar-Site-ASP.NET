@@ -28,23 +28,9 @@ namespace Sneaker_Bar
         {
             services.AddHttpContextAccessor();
 
-            /*  services.AddDbContext<PurchaseContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
-              services.AddDbContext<SneakersContext>(options=>options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
-              services.AddDbContext<UserContext>(options=>options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
-              services.AddDbContext<CommentContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
-              services.AddDbContext<ArticleContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=Sneakers; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"));
-            */
-
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
 
-
-            /* services.AddDbContext<SneakersContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-             services.AddDbContext<UserContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-             services.AddDbContext<CommentContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));
-             services.AddDbContext<ArticleContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Connection")));*/
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews(mvcOtions =>
             {

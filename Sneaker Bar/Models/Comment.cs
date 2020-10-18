@@ -8,11 +8,11 @@ namespace Sneaker_Bar.Models
     public class Comment
     {
         public int Id { get; set; }
-        public string title { get; set; }
-        public string text { get; set; }
-        public int userId { get; set; }
-        public int articleId { get; set; }
-        public Article article { get; set; }
-        public DateTime date { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public int UserId { get; set; }
+        public int ArticleId { get; set; }
+        public Article Article { get; set; }
+        public DateTime Date { get; set; }
     }
 }

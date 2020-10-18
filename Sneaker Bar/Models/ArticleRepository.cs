@@ -14,9 +14,13 @@ namespace Sneaker_Bar.Models
             context = _context; 
         }
         public IQueryable<Article> getArticles() {
-            return context.Articles.OrderBy(x => x.date);
+            return context.Articles.OrderBy(x => x.Date);
         }
-         
+
+        public Article getArticleById(int Id) {
+            return context.Articles.Where(x => x.Id == Id).FirstOrDefault();
+        }
+
         public int SaveArticle(Article article)
         {
             if (article.Id == default)

@@ -2,7 +2,7 @@
 <div>
     <h1>Edit Sneakers</h1>
 
-    <form asp-controller="Home" asp-action="SneakersEdit" method="post" enctype="multipart/form-data">
+    <form asp-controller="Sneakers" asp-action="SneakersEdit" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
 
         <div class="form-group row">
@@ -48,7 +48,7 @@
         @if (Model != null && Model.ImageData != null)
         {
             <div class="col-sm-8">
-                <img class="img-thumbnail" src="~/images/@Model.ImageData"
+                <img class="img-thumbnail" src="~/images/sneakers/@Model.ImageData"
                      asp-append-version="true" id="imageInput" />
             </div>
         }

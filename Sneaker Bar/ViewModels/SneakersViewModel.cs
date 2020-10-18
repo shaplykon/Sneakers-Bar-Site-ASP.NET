@@ -8,7 +8,6 @@ namespace Sneaker_Bar.ViewModels
 {
     public class SneakersViewModel
     {
-
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please input price")]

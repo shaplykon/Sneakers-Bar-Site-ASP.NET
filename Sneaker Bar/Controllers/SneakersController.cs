@@ -1,11 +1,11 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Sneaker_Bar.Models;
-
+using Sneaker_Bar.ViewModels;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -14,12 +14,13 @@ namespace Sneaker_Bar.Controllers
         SneakersRepository sneakersRepository;
         PurchaseRepository purchaseRepository;
         CommentRepository commentRepository;
+        IWebHostEnvironment webHostEnvironment;
 
         public SneakersController(
-            SneakersRepository _sneakersRepository,
-            PurchaseRepository _purchaseRepository,
-            CommentRepository _commentRepository)
+            SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository, 
+            CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment)
         {
+            webHostEnvironment = _webHostEnvironment;
             commentRepository = _commentRepository;
             sneakersRepository = _sneakersRepository;
             purchaseRepository = _purchaseRepository;
@@ -73,10 +74,9 @@ namespace Sneaker_Bar.Controllers
                 purchaseRepository.SavePurchase(
                 new Purchase
                 {
-                    purchaseId = 0,
-                    userId = userId,
-                    sneakersId = sneakersId,
-                    //isConfirmed = false,
+                    PurchaseId = 0,
+                    UserId = userId,
+                    SneakersId = sneakersId,
                     Date = DateTime.Now,
 
                 });
@@ -92,7 +92,7 @@ namespace Sneaker_Bar.Controllers
             List<Sneakers> sneakers = new List<Sneakers>();
             foreach (Purchase purchase in purchases)
             {
-                sneakers.Add(sneakersRepository.GetSneakersById(purchase.sneakersId));
+                sneakers.Add(sneakersRepository.GetSneakersById(purchase.SneakersId));
             }
             ViewBag.sneakers = sneakers;
             return View();
@@ -104,6 +104,66 @@ namespace Sneaker_Bar.Controllers
             purchaseRepository.DeletePurchaseById(int.Parse(User.Identity.Name), Id);
 
             return Redirect("/Sneakers/ShoppingCart");
+        }
+
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
+        [HttpGet]
+        public IActionResult SneakersEdit(int id)
+        {
+            Sneakers sneakers = id == 0 ?
+                new Sneakers() :
+                sneakersRepository.GetSneakersById(id);
+            return View(sneakers);
+        }
+
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
+        [HttpPost]
+        public IActionResult SneakersEdit(SneakersViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = UploadedFile(viewModel);
+
+                Sneakers sneakers = new Sneakers
+                {
+                    Id = viewModel.Id,
+                    Company = viewModel.Company,
+                    Model = viewModel.Model,
+                    Price = viewModel.Price,
+                    ReleaseDate = viewModel.ReleaseDate,
+                    ImageData = uniqueFileName,
+                };
+                sneakersRepository.SaveSneakers(sneakers);
+                return RedirectToAction(nameof(HomeController.Index));
+            }
+
+
+            return View((Sneakers)viewModel);
+        }
+
+        private string UploadedFile(SneakersViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.ImageData != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/sneakers");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageData.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ImageData.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
+        [HttpPost]
+        public IActionResult SneakersDelete(int Id)
+        {
+            sneakersRepository.DeleteSneakers(new Sneakers { Id = Id });
+            return RedirectToAction("Index");
         }
     }
 }

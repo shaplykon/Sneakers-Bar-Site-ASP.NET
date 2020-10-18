@@ -14,7 +14,7 @@ namespace Sneaker_Bar.Models
         }
 
         public IQueryable<Comment> getCommentsByArticleId(int Id) {
-            return context.Comments.Where(x => x.articleId == Id);
+            return context.Comments.Where(x => x.ArticleId == Id);
         }
 
         public int SaveComment(Comment comment)
