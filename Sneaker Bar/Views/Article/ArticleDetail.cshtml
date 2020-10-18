@@ -1,40 +1,84 @@
-﻿@model Sneaker_Bar.Models.Article
+﻿@model Sneaker_Bar.Models.Comment
+
 @{
     ViewData["Title"] = "Sneakers detail";
 }
+<div class="row">
+    <h1>@ViewBag.Article.Title</h1>
+</div>
+<div class="row">
+    <a>@ViewBag.Article.Date</a>
+</div>
+
+<div class="row">
+    <img class="img-thumbnail" src="~/images/articles/@ViewBag.Article.ImageData" />
+</div>
 
 <div class="row">
     <a>@ViewBag.Article.Text</a>
 </div>
-<div class="row">
-    <a>@ViewBag.Article.Title</a>
-</div>
-<div class="row">
-    <a>@ViewBag.Article.Date.ToShortDateString()</a>
-</div>
+
+
 <div class="row">
     <a>User ID: @ViewBag.Article.UserId</a>
 </div>
-<div class="row">
-    <img class="img" src="~/images/articles/@ViewBag.Article.ImageData" />
-</div>
 
 
-
-<div class="media-block" style="margin-top:20px">
-    <a class="media-left"><img class="img-circle img-sm" style="width:50px; height:50px" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/1.png"></a>
-    <div class="media-body">
-        <div class="mar-btm">
-            <a class="btn-link text-semibold media-heading box-inline">Максим</a>
-            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> @DateTime.Now</p>
+<form method="post" asp-controller="Comment" asp-action="CommentAdd" style="margin-top:20px;">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Title"></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" asp-for="Title" />
         </div>
-        <p>Comment example!</p>
-        <div class="pad-ver">
-            <div class="btn-group">
-                <a class="btn btn-sm btn-default btn-hover-success"><i class="fa fa-thumbs-up"></i></a>
-                <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
-            </div>
-        </div>
-
+        <span asp-validation-for="Title"></span>
     </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Text"></label>
+        <div class="col-sm-6">
+            <textarea class="form-control " asp-for="Text"></textarea>
+        </div>
+        <span asp-validation-for="Text"></span>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-6">
+            <input type="submit" class="form-control" value="Send comment">
+        </div> 
+    </div>
+
+</form>
+
+
+<div class="row" style="margin-top:20px">
+    @{ if (ViewBag.Commnets != null)
+        {
+            foreach (Comment comment in ViewBag.Comments)
+            {
+                <div class="media-block" style="margin-top:20px">
+                    <a class="media-left"><img class="img-circle img-sm" style="width:50px; height:50px" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/1.png"></a>
+                    <div class="media-body">
+                        <div class="mar-btm">
+                            <a class="btn-link text-semibold media-heading box-inline">@comment.UserId</a>
+                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> @DateTime.Now</p>
+                        </div>
+                        <p>@comment.Text</p>
+                        <div class="pad-ver">
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-default btn-hover-success"><i class="fa fa-thumbs-up"></i></a>
+                                <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <a>Comments: 0 </a>
+        }
+    }
+
+
 </div>

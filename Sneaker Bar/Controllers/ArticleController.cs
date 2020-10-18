@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 
 namespace Sneaker_Bar.Controllers
@@ -11,9 +13,15 @@ namespace Sneaker_Bar.Controllers
     public class ArticleController : Controller
     {
         ArticleRepository articleRepository;
+        CommentRepository commentRepository;
         private IWebHostEnvironment webHostEnvironment;
 
-        public ArticleController(ArticleRepository _articleRepository, IWebHostEnvironment  _webHostEnvironment) {
+        public ArticleController(
+            ArticleRepository _articleRepository,
+            IWebHostEnvironment _webHostEnvironment,
+            CommentRepository _commentRepository)
+        {
+            commentRepository = _commentRepository;
             articleRepository = _articleRepository;
             webHostEnvironment = _webHostEnvironment;
         }
@@ -26,9 +34,11 @@ namespace Sneaker_Bar.Controllers
         }
 
         [HttpPost]
-        public IActionResult ArticleEdit(ArticleViewModel viewModel) {
+        public IActionResult ArticleEdit(ArticleViewModel viewModel)
+        {
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 string uniqueFileName = UploadedFile(viewModel);
 
                 Article article = new Article
@@ -66,12 +76,7 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ArticleDetail(int Id)
         {
             Article article = articleRepository.getArticleById(Id);
-
-            /* if (sneakers.commentIds.Count() > 0)
-             {
-                 List<Comment> comments = commentRepository.getCommentsByIdArray(sneakers.commentIds);
-                 ViewBag.comments = comments;
-             }*/
+            ViewBag.Сomments = commentRepository.getCommentsByArticleId(article.Id);
             ViewBag.Article = article;
 
             return View();
