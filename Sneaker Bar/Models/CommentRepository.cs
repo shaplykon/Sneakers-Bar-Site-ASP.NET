@@ -10,11 +10,13 @@ namespace Sneaker_Bar.Model
     public class CommentRepository
     {
         private readonly ApplicationDbContext context;
-        public CommentRepository(ApplicationDbContext _context) {
+        public CommentRepository(ApplicationDbContext _context)
+        {
             context = _context;
         }
 
-        public IQueryable<Comment> getCommentsByArticleId(int Id) {
+        public IQueryable<Comment> getCommentsByArticleId(int Id)
+        {
             return context.Comments.Where(x => x.ArticleId == Id);
         }
 
@@ -32,10 +34,12 @@ namespace Sneaker_Bar.Model
             return comment.Id;
         }
 
-        public void DeleteSneakers(Comment comment)
+
+        public void DeleteCommentById(Comment comment)
         {
             context.Comments.Remove(comment);
             context.SaveChanges();
+
         }
     }
 }

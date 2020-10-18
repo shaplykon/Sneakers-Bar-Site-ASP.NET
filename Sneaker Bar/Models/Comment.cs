@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace Sneaker_Bar.Models
 {
@@ -8,6 +8,7 @@ namespace Sneaker_Bar.Models
     public class Comment
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "Input title")]
         public string Title { get; set; }
         public string Text { get; set; }
         public int UserId { get; set; }

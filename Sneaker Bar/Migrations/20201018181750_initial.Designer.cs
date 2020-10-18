@@ -10,74 +10,20 @@ using Sneaker_Bar.Models;
 namespace Sneaker_Bar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201017174415_update_contexts")]
-    partial class update_contexts
+    [Migration("20201018181750_initial")]
+    partial class initial
     {
-        protected override void BuildTargetModel(ModelBuilder ModelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            ModelBuilder
+            modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("text")
-                        .HasColumnType("text");
-
-                    b.Property<string>("title")
-                        .HasColumnType("text");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("article");
-                });
-
-            ModelBuilder.Entity("Sneaker_Bar.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("articleId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("text")
-                        .HasColumnType("text");
-
-                    b.Property<string>("title")
-                        .HasColumnType("text");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("articleId");
-
-                    b.ToTable("comment");
-                });
-            ModelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
-                {
-                    b.Property<int>("purchaseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -85,22 +31,54 @@ namespace Sneaker_Bar.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("sneakersId")
+                    b.Property<string>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("userId")
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("article");
+                });
+
+            modelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
+                {
+                    b.Property<int>("PurchaseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("SneakersId")
                         .HasColumnType("integer");
 
-                    b.HasKey("purchaseId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("sneakersId");
+                    b.HasKey("PurchaseId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("SneakersId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("purchase");
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Role", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,7 +110,7 @@ namespace Sneaker_Bar.Migrations
                         });
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Sneakers", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Sneakers", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,12 +118,15 @@ namespace Sneaker_Bar.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Company")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("ImageData")
-                        .HasColumnType("bytea");
+                    b.Property<string>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Model")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<double>("Price")
@@ -159,7 +140,7 @@ namespace Sneaker_Bar.Migrations
                     b.ToTable("sneakers");
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.User", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,40 +172,31 @@ namespace Sneaker_Bar.Migrations
                         });
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
                 {
-                    b.HasOne("Sneaker_Bar.Models.User", "user")
+                    b.HasOne("Sneaker_Bar.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Comment", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
                 {
-                    b.HasOne("Sneaker_Bar.Models.Article", "article")
+                    b.HasOne("Sneaker_Bar.Models.Sneakers", "Sneakers")
                         .WithMany()
-                        .HasForeignKey("articleId")
+                        .HasForeignKey("SneakersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sneaker_Bar.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
-                {
-                    b.HasOne("Sneaker_Bar.Models.Sneakers", "sneakers")
-                        .WithMany()
-                        .HasForeignKey("sneakersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sneaker_Bar.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            ModelBuilder.Entity("Sneaker_Bar.Models.User", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.User", b =>
                 {
                     b.HasOne("Sneaker_Bar.Models.Role", "Role")
                         .WithMany()

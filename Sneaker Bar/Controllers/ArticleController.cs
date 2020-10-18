@@ -4,6 +4,7 @@ using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -76,12 +77,22 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ArticleDetail(int Id)
         {
             Article article = articleRepository.getArticleById(Id);
-            ViewBag.Сomments = commentRepository.getCommentsByArticleId(article.Id);
+            List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();
             ViewBag.Article = article;
-
+            ViewBag.Comments = comments;
             return View();
         }
 
-
+        [HttpPost]
+        public IActionResult CommentAdd(Comment comment, int articleId)
+        {
+            if (ModelState.IsValid)
+            {
+                comment.Date = DateTime.Now;
+                comment.UserId = int.Parse(HttpContext.User.Identity.Name);
+                commentRepository.SaveComment(comment);
+            }
+            return RedirectToAction("ArticleDetail", new { Id = articleId });
+        }
     }
 }

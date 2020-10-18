@@ -11,15 +11,15 @@ namespace Sneaker_Bar.Migrations
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildModel(ModelBuilder ModelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            ModelBuilder
+            modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace Sneaker_Bar.Migrations
                     b.ToTable("article");
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Comment", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,6 +68,7 @@ namespace Sneaker_Bar.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("UserId")
@@ -80,7 +81,7 @@ namespace Sneaker_Bar.Migrations
                     b.ToTable("comment");
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
                 {
                     b.Property<int>("PurchaseId")
                         .ValueGeneratedOnAdd()
@@ -105,7 +106,7 @@ namespace Sneaker_Bar.Migrations
                     b.ToTable("purchase");
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Role", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,7 +138,7 @@ namespace Sneaker_Bar.Migrations
                         });
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Sneakers", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Sneakers", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +168,7 @@ namespace Sneaker_Bar.Migrations
                     b.ToTable("sneakers");
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.User", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,7 +200,7 @@ namespace Sneaker_Bar.Migrations
                         });
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Article", b =>
                 {
                     b.HasOne("Sneaker_Bar.Models.User", "User")
                         .WithMany()
@@ -208,7 +209,7 @@ namespace Sneaker_Bar.Migrations
                         .IsRequired();
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Comment", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Comment", b =>
                 {
                     b.HasOne("Sneaker_Bar.Models.Article", "Article")
                         .WithMany()
@@ -217,7 +218,7 @@ namespace Sneaker_Bar.Migrations
                         .IsRequired();
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.Purchase", b =>
                 {
                     b.HasOne("Sneaker_Bar.Models.Sneakers", "Sneakers")
                         .WithMany()
@@ -232,7 +233,7 @@ namespace Sneaker_Bar.Migrations
                         .IsRequired();
                 });
 
-            ModelBuilder.Entity("Sneaker_Bar.Models.User", b =>
+            modelBuilder.Entity("Sneaker_Bar.Models.User", b =>
                 {
                     b.HasOne("Sneaker_Bar.Models.Role", "Role")
                         .WithMany()

@@ -13,7 +13,6 @@ namespace Sneaker_Bar
 {
     public class Startup
     {
-
         public IConfiguration Configuration { get; }
 
 
