@@ -14,30 +14,38 @@
     </div>
 
 }
+<div class="jumbotron" style="margin-left:30px; margin-right:37px;">
+    <h1 class="display-4">Hello, world!</h1>
+    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+    <hr class="my-4">
+    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+</div>
+
+
 
 <div class="card-deck deck-index">
 
-
-    @foreach (Sneakers sneakers in Model)
+    @foreach (Sneakers sneakers in ViewBag.Sneakers)
     {
         <div class="card w-25" style=" margin-left: 45px; margin-right: 45px; margin-bottom: 20px;">
-            <img class="card-img-top" src="~/images/sneakers/@sneakers.ImageData" />
+            <img class="card-img-top" style="max-height:190px" src="~/images/sneakers/@sneakers.ImageData" />
             <div class="card-body" style=" position: relative;">
 
-                <h4 class="card-title font-weight-bold" style="margin-bottom:6rem;">
+                <h4 class="card-title font-weight-bold" style="margin-top:10px;min-height:57.6px">
                     @sneakers.Company
                     @sneakers.Model
                 </h4>
-                <h6 class="card-subtitle mb-2 text-muted" style="position:absolute; bottom:80px">
+                <h6 class="card-subtitle mb-2 text-muted" style="margin-top:10px;">
                     @sneakers.ReleaseDate.ToShortDateString()
                 </h6>
-                <h4 class="card-text font-weight-bold" style="position:absolute; bottom:35px">
+                <h4 class="card-text font-weight-bold" style="margin-top:10px;">
                     @sneakers.Price$
                 </h4>
 
                 @if (User.IsInRole("admin") || User.IsInRole("manager"))
                 {
-                    <div class="row" style="position:absolute; bottom:5px;">
+                    <div class="row" style="margin-top:10px;">
                         <div class="col-sm-6">
                             <form method="get" asp-controller="Sneakers" asp-action="SneakersEdit" asp-route-sneakersId="@sneakers.Id">
                                 <input type="hidden" value="@sneakers.Id" name="id" />
@@ -59,15 +67,24 @@
             </div>
 
         </div>
-
-
     }
 </div>
 
-<div class="jumbotron" style="margin-left:30px; margin-right:37px;">
-    <h1 class="display-4">Hello, world!</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-    <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-</div>
+@foreach (Article article in ViewBag.Articles)
+{
+    <div class="row" >
+        <a asp-controller="Article" asp-action="ArticleDetail" asp-route-Id="@article.Id">@article.Text</a>
+    </div>
+    <div class="row">
+        <a>@article.Title</a>
+    </div>
+    <div class="row">
+        <a>@article.Date.ToShortDateString()</a>
+    </div>
+    <div class="row">
+        <a>User ID: @article.UserId</a>
+    </div>
+    <div class="row">
+        <img class="img" src="~/images/articles/@article.ImageData" />
+    </div>
+}

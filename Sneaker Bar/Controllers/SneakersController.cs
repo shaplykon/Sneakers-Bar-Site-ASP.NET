@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
 
@@ -134,7 +135,7 @@ namespace Sneaker_Bar.Controllers
                     ImageData = uniqueFileName,
                 };
                 sneakersRepository.SaveSneakers(sneakers);
-                return RedirectToAction(nameof(HomeController.Index));
+                return RedirectToAction("Index");
             }
 
 

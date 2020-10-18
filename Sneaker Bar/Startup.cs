@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sneaker_Bar.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
+using Sneaker_Bar.Model;
 
 namespace Sneaker_Bar
 {

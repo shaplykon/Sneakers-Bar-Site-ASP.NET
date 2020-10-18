@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sneaker_Bar.Migrations
 {
-    public partial class added_sneakers_view_model : Migration
+    public partial class added_sneakers_view_Model : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

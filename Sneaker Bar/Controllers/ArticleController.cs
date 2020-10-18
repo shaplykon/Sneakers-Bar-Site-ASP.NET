@@ -45,21 +45,38 @@ namespace Sneaker_Bar.Controllers
             }
             return View((Article)viewModel);
         }
-        private string UploadedFile(ArticleViewModel model)
+        private string UploadedFile(ArticleViewModel viewModel)
         {
             string uniqueFileName = null;
 
-            if (model.ImageData != null)
+            if (viewModel.ImageData != null)
             {
                 string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/articles");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageData.FileName;
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.ImageData.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    model.ImageData.CopyTo(fileStream);
+                    viewModel.ImageData.CopyTo(fileStream);
                 }
             }
             return uniqueFileName;
         }
+
+        [HttpGet]
+        public IActionResult ArticleDetail(int Id)
+        {
+            Article article = articleRepository.getArticleById(Id);
+
+            /* if (sneakers.commentIds.Count() > 0)
+             {
+                 List<Comment> comments = commentRepository.getCommentsByIdArray(sneakers.commentIds);
+                 ViewBag.comments = comments;
+             }*/
+            ViewBag.Article = article;
+
+            return View();
+        }
+
+
     }
 }

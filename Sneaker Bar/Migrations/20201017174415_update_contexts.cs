@@ -28,7 +28,7 @@ namespace Sneaker_Bar.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Price = table.Column<double>(nullable: false),
-                    Model = table.Column<string>(nullable: true),
+                 Model = table.Column<string>(nullable: true),
                     Company = table.Column<string>(nullable: true),
                     ReleaseDate = table.Column<DateTime>(nullable: false),
                     ImageData = table.Column<byte[]>(nullable: true)

@@ -24,14 +24,14 @@ namespace RolesApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterModel Model)
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == Model.Email);
                 if (user == null)
                 {
-                    user = new User { Email = model.Email, Password = model.Password };
+                    user = new User { Email = Model.Email, Password = Model.Password };
                     Role userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "user");
                     if (userRole != null)
                         user.Role = userRole;
@@ -46,7 +46,7 @@ namespace RolesApp.Controllers
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
-            return View(model);
+            return View(Model);
         }
         [HttpGet]
         public IActionResult Login()
@@ -55,13 +55,13 @@ namespace RolesApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel Model)
         {
             if (ModelState.IsValid)
             {
                 User user = await _context.Users
                     .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                    .FirstOrDefaultAsync(u => u.Email == Model.Email && u.Password == Model.Password);
                 if (user != null)
                 {
                     await Authenticate(user);
@@ -70,7 +70,7 @@ namespace RolesApp.Controllers
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
-            return View(model);
+            return View(Model);
         }
         private async Task Authenticate(User user)
         {

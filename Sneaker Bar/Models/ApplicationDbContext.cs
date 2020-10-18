@@ -22,7 +22,7 @@ namespace Sneaker_Bar.Models
         }
 
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder ModelBuilder)
         {
             string adminRoleName = "admin";
             string userRoleName = "user";
@@ -37,9 +37,9 @@ namespace Sneaker_Bar.Models
             Role managerRole = new Role { Id = 3, Name = managerRoleName };
             User adminUser = new User { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id };
 
-            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole, managerRole });
-            modelBuilder.Entity<User>().HasData(new User[] { adminUser });
-            base.OnModelCreating(modelBuilder);
+            ModelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole, managerRole });
+            ModelBuilder.Entity<User>().HasData(new User[] { adminUser });
+            base.OnModelCreating(ModelBuilder);
         }
     }
 }
