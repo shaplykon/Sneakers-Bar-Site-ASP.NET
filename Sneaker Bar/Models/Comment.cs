@@ -14,6 +14,6 @@ namespace Sneaker_Bar.Models
         public int UserId { get; set; }
         public int ArticleId { get; set; }
         public Article Article { get; set; }
-        public DateTime Date { get; set; }
+    //    public DateTime Date { get; set; }
     }
 }

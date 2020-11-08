@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/query.slim.min.js" />
     <link rel="stylesheet" href="~/bootstrap.bundle.min.js" />
-
-
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -22,30 +21,11 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-                            @if (User.IsInRole("user"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sneakers" asp-action="ShoppingCart">Shopping cart</a>
-                                </li>
-                            }
-                        }
 
+                        <partial name="_LoginPartial.cshtml" />
+           
                     </ul>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @:<a class="text-dark"> You are welcome, @User.Identity.Name.ToString()</a>
-                    }
+
                 </div>
             </div>
         </nav>

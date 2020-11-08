@@ -3,6 +3,14 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "DefaultConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ApplicationDbContextConnection"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "AuthDbContextConnection"
     }
   }
 }

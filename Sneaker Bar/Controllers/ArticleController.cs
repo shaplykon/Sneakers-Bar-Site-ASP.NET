@@ -88,7 +88,7 @@ namespace Sneaker_Bar.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.Date = DateTime.Now;
+              //  comment.Date = DateTime.Now;
                 comment.UserId = int.Parse(HttpContext.User.Identity.Name);
                 commentRepository.SaveComment(comment);
             }

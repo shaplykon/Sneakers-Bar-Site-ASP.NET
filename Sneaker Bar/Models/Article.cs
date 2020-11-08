@@ -15,7 +15,7 @@ namespace Sneaker_Bar.Models
         [Required(ErrorMessage = "Select Image")]
         public string ImageData { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+     //   public User User { get; set; }
         public DateTime Date { get; set; }
     }
 }

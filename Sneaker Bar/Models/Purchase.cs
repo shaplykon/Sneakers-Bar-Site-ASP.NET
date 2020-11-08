@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sneaker_Bar.Models
@@ -8,7 +9,7 @@ namespace Sneaker_Bar.Models
     {
         public int PurchaseId { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+    //    public User User { get; set; }
         public int SneakersId { get; set; }
         public Sneakers Sneakers { get; set; }
         public DateTime Date { get; set; }

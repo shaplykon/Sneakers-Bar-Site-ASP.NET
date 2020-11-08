@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -18,7 +21,7 @@ namespace Sneaker_Bar.Controllers
         IWebHostEnvironment webHostEnvironment;
 
         public SneakersController(
-            SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository, 
+            SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
             CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment)
         {
             webHostEnvironment = _webHostEnvironment;
@@ -32,21 +35,21 @@ namespace Sneaker_Bar.Controllers
         {
             Sneakers sneakers = sneakersRepository.GetSneakersById(Id);
 
-           /* if (sneakers.commentIds.Count() > 0)
-            {
-                List<Comment> comments = commentRepository.getCommentsByIdArray(sneakers.commentIds);
-                ViewBag.comments = comments;
-            }*/
+            /* if (sneakers.commentIds.Count() > 0)
+             {
+                 List<Comment> comments = commentRepository.getCommentsByIdArray(sneakers.commentIds);
+                 ViewBag.comments = comments;
+             }*/
 
             ViewBag.sneakers = sneakers;
- 
+
             if (User.Identity.IsAuthenticated)
             {
                 if (purchaseRepository.IsInPurchases(int.Parse(User.Identity.Name), Id))
                 {
                     ViewBag.isInCart = true;
                 }
-
+                
                 else
                 {
                     ViewBag.isInCart = false;
@@ -122,7 +125,7 @@ namespace Sneaker_Bar.Controllers
         public IActionResult SneakersEdit(SneakersViewModel viewModel)
         {
             if (ModelState.IsValid)
-            {
+            {   
                 string uniqueFileName = UploadedFile(viewModel);
 
                 Sneakers sneakers = new Sneakers
@@ -165,6 +168,15 @@ namespace Sneaker_Bar.Controllers
         {
             sneakersRepository.DeleteSneakers(new Sneakers { Id = Id });
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmOrder() {
+            String email = User.Identity.Name;
+            
+            MailService mailService = new MailService();
+            mailService.SendEmailAsync("shaplykon@gmail.com", "loh", "loh");
+            return RedirectToAction("OrderConfirmation");
         }
     }
 }
