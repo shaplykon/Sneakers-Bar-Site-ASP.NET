@@ -1,5 +1,8 @@
 ﻿@model List<Sneaker_Bar.Models.Comment>
 
+@using Microsoft.AspNetCore.Identity;
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager;
+
 <div id="commentsForm">
     @{ if (ViewBag.Comments != null)
         {
@@ -10,7 +13,7 @@
                         <a class="media-left"><img class="img-circle img-sm" style="width:50px; height:50px" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/1.png"></a>
                         <div class="media-body">
                             <div class="mar-btm">
-                                <a class="btn-link text-semibold media-heading box-inline">User ID: @comment.UserId</a>
+                                <a class="btn-link text-semibold media-heading box-inline">Username: @comment.AuthorName</a>
                                 <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> @DateTime.Now</p>
                                 <h4>@comment.Title</h4>
                             </div>
@@ -21,7 +24,7 @@
                                     <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
                                 </div>
                             </div>-->
-                            @{ if (User.Identity.IsAuthenticated && comment.UserId == int.Parse(User.Identity.Name))
+                            @{ if (User.Identity.IsAuthenticated && comment.UserId == Guid.Parse(userManager.GetUserId(User)))
                                 {
                                     <a asp-controller="Article" asp-action="DeleteComment" asp-route-Id="@comment.Id">Delete</a>
                                 }}

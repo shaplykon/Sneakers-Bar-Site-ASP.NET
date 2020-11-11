@@ -2,7 +2,8 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@using Microsoft.AspNetCore.Identity;
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager;
 @if (User.IsInRole("admin"))
 {
     <div class="text-center">
@@ -78,10 +79,10 @@
         <a>@article.Title</a>
     </div>
     <div class="row">
-        <a>@article.Date.ToShortDateString()</a>
+        <a>@article.Date</a>
     </div>
     <div class="row">
-        <a>User ID: @article.UserId</a>
+        <a>Username: @article.AuthorName</a>
     </div>
     <div class="row">
         <img class="img" src="~/images/articles/@article.ImageData" />

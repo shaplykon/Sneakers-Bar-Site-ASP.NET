@@ -19,11 +19,14 @@ namespace Sneaker_Bar.Controllers
         PurchaseRepository purchaseRepository;
         CommentRepository commentRepository;
         IWebHostEnvironment webHostEnvironment;
+        UserManager<IdentityUser> userManager;
 
         public SneakersController(
             SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
-            CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment)
+            CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment,
+                    UserManager<IdentityUser> _userManager)
         {
+            userManager = _userManager;
             webHostEnvironment = _webHostEnvironment;
             commentRepository = _commentRepository;
             sneakersRepository = _sneakersRepository;
@@ -45,7 +48,7 @@ namespace Sneaker_Bar.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                if (purchaseRepository.IsInPurchases(int.Parse(User.Identity.Name), Id))
+                if (purchaseRepository.IsInPurchases(Guid.Parse(userManager.GetUserId(HttpContext.User)), Id))
                 {
                     ViewBag.isInCart = true;
                 }
@@ -67,10 +70,10 @@ namespace Sneaker_Bar.Controllers
         [HttpPost]
         public IActionResult AddToShoppingCart(int sneakersId)
         {
-            int userId = int.Parse(User.Identity.Name);
-            if (purchaseRepository.IsInPurchases(int.Parse(User.Identity.Name), sneakersId))
+            Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
+            if (purchaseRepository.IsInPurchases(userId, sneakersId))
             {
-                purchaseRepository.DeletePurchaseById(int.Parse(User.Identity.Name), sneakersId);
+                purchaseRepository.DeletePurchaseById(userId, sneakersId);
             }
 
             else
@@ -85,13 +88,13 @@ namespace Sneaker_Bar.Controllers
 
                 });
             }
-            return RedirectToAction("SneakersDetail", new { Id = sneakersId });
+            return RedirectToAction("SneakersDetail", "Sneakers", new { Id = sneakersId });
         }
 
         [HttpGet]
         public IActionResult ShoppingCart()
         {
-            int userId = int.Parse(User.Identity.Name);
+            Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
             List<Purchase> purchases = purchaseRepository.GetPurchaseByUserId(userId).ToList();
             List<Sneakers> sneakers = new List<Sneakers>();
             foreach (Purchase purchase in purchases)
@@ -105,9 +108,9 @@ namespace Sneaker_Bar.Controllers
         [HttpPost]
         public IActionResult DeleteFromShoppingCart(int Id)
         {
-            purchaseRepository.DeletePurchaseById(int.Parse(User.Identity.Name), Id);
+            purchaseRepository.DeletePurchaseById(Guid.Parse(userManager.GetUserId(HttpContext.User)), Id);
 
-            return Redirect("/Sneakers/ShoppingCart");
+            return RedirectToAction("ShoppingCart", "Sneakers");
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
@@ -138,7 +141,7 @@ namespace Sneaker_Bar.Controllers
                     ImageData = uniqueFileName,
                 };
                 sneakersRepository.SaveSneakers(sneakers);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
 
@@ -167,15 +170,15 @@ namespace Sneaker_Bar.Controllers
         public IActionResult SneakersDelete(int Id)
         {
             sneakersRepository.DeleteSneakers(new Sneakers { Id = Id });
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public IActionResult ConfirmOrder() {
+        public async System.Threading.Tasks.Task<IActionResult> ConfirmOrderAsync() {
             String email = User.Identity.Name;
             
             MailService mailService = new MailService();
-            mailService.SendEmailAsync("shaplykon@gmail.com", "loh", "loh");
+            await mailService.SendEmailAsync(email, "loh", "loh");
             return RedirectToAction("OrderConfirmation");
         }
     }

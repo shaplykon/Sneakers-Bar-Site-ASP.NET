@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
@@ -16,15 +17,18 @@ namespace Sneaker_Bar.Controllers
         ArticleRepository articleRepository;
         CommentRepository commentRepository;
         private IWebHostEnvironment webHostEnvironment;
+        private readonly UserManager<IdentityUser> userManager;
 
         public ArticleController(
             ArticleRepository _articleRepository,
             IWebHostEnvironment _webHostEnvironment,
-            CommentRepository _commentRepository)
+            CommentRepository _commentRepository,
+            UserManager<IdentityUser> _userManager)
         {
             commentRepository = _commentRepository;
             articleRepository = _articleRepository;
             webHostEnvironment = _webHostEnvironment;
+            userManager = _userManager;
         }
 
         [HttpGet]
@@ -47,12 +51,13 @@ namespace Sneaker_Bar.Controllers
                     Id = viewModel.Id,
                     Title = viewModel.Title,
                     Text = viewModel.Text,
-                    UserId = int.Parse(HttpContext.User.Identity.Name),
+                    UserId = Guid.Parse(userManager.GetUserId(HttpContext.User)),
                     Date = DateTime.Now,
                     ImageData = uniqueFileName,
+                    AuthorName = HttpContext.User.Identity.Name
                 };
                 articleRepository.SaveArticle(article);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View((Article)viewModel);
         }
@@ -83,22 +88,25 @@ namespace Sneaker_Bar.Controllers
             return View();
         }
 
+        [Microsoft.AspNetCore.Authorization.Authorize]
         [HttpPost]
         public IActionResult CommentAdd(Comment comment, int articleId)
         {
             if (ModelState.IsValid)
             {
-              //  comment.Date = DateTime.Now;
-                comment.UserId = int.Parse(HttpContext.User.Identity.Name);
+                Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
+                comment.Date = DateTime.Now;
+                comment.UserId = userId;
+                comment.AuthorName = HttpContext.User.Identity.Name;
                 commentRepository.SaveComment(comment);
             }
-            return RedirectToAction("ArticleDetail", new { Id = articleId });
+            return RedirectToAction("ArticleDetail", "Article" , new { Id = articleId });
         }
         [HttpPost]
         public IActionResult DeleteComment(int commentId, int articleId)
         {
             commentRepository.DeleteCommentById(commentId);
-            return RedirectToAction("ArticleDetail", new { Id = articleId });
+            return RedirectToAction("ArticleDetail","Article" ,new { Id = articleId });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -18,7 +19,7 @@ namespace Sneaker_Bar.Models
             return context.Purchases.OrderBy(x => x.Date);
         }
 
-        public IQueryable<Purchase> GetPurchaseByUserId(int Id)
+        public IQueryable<Purchase> GetPurchaseByUserId(Guid Id)
         {
             return context.Purchases.Where(x => x.UserId == Id);
         }
@@ -28,7 +29,7 @@ namespace Sneaker_Bar.Models
             return context.Purchases.Where(x => x.SneakersId == Id);
         }
 
-        public bool IsInPurchases(int userId, int sneakersId) {
+        public bool IsInPurchases(Guid userId, int sneakersId) {
             IQueryable<Purchase> purchase = context.Purchases.Where(x => x.SneakersId == sneakersId && x.UserId == userId);
             if (purchase.Count() == 0) return false;
             else return true;
@@ -54,7 +55,7 @@ namespace Sneaker_Bar.Models
             context.SaveChanges();
         }
 
-        public void DeletePurchaseById(int userId, int sneakersId)
+        public void DeletePurchaseById(Guid userId, int sneakersId)
         {
             Purchase purchase = context.Purchases.Where(x => x.SneakersId == sneakersId && x.UserId == userId).SingleOrDefault();
             context.Purchases.Remove(purchase);

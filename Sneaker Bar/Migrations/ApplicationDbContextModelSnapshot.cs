@@ -224,6 +224,9 @@ namespace Sneaker_Bar.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("AuthorName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone");
 
@@ -239,8 +242,8 @@ namespace Sneaker_Bar.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -257,6 +260,12 @@ namespace Sneaker_Bar.Migrations
                     b.Property<int>("ArticleId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("AuthorName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Text")
                         .HasColumnType("text");
 
@@ -264,8 +273,8 @@ namespace Sneaker_Bar.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -287,12 +296,20 @@ namespace Sneaker_Bar.Migrations
                     b.Property<int>("SneakersId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isConfirmed")
+                        .HasColumnType("boolean");
 
                     b.HasKey("PurchaseId");
 
                     b.HasIndex("SneakersId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("purchase");
                 });
@@ -394,6 +411,10 @@ namespace Sneaker_Bar.Migrations
                         .HasForeignKey("SneakersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
                 });
 #pragma warning restore 612, 618
         }

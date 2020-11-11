@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,8 +15,8 @@ namespace Sneaker_Bar.Models
         public string Text { get; set; }
         [Required(ErrorMessage = "Select Image")]
         public string ImageData { get; set; }
-        public int UserId { get; set; }
-     //   public User User { get; set; }
+        public Guid UserId { get; set; }
+        public string AuthorName { get; set; }
         public DateTime Date { get; set; }
     }
 }

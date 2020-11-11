@@ -1,5 +1,6 @@
 ﻿@model Sneaker_Bar.Models.Comment
-
+@using Microsoft.AspNetCore.Identity;
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager;
 
 <div class="row">
     <h1>@ViewBag.Article.Title</h1>
@@ -16,13 +17,12 @@
     <a>@ViewBag.Article.Text</a>
 </div>
 
-
 <div class="row">
-    <a>User ID: @ViewBag.Article.UserId</a>
+    <a>Username: @ViewBag.Article.AuthorName</a>
 </div>
 
 
-<form  asp-controller="Article" asp-action="CommentAdd" method="post" style="margin-top:20px;">
+<form asp-controller="Article" asp-action="CommentAdd" method="post" style="margin-top:20px;">
 
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" asp-for="Title"></label>
@@ -57,7 +57,7 @@
                     <a class="media-left"><img class="img-circle img-sm" style="width:50px; height:50px" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/1.png"></a>
                     <div class="media-body">
                         <div class="mar-btm">
-                            <a class="btn-link text-semibold media-heading box-inline">User ID: @comment.UserId</a>
+                            <a class="btn-link text-semibold media-heading box-inline">Username: @comment.AuthorName</a>
                             <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> </p>
                             <h4>@comment.Title</h4>
                         </div>
@@ -68,7 +68,7 @@
                                 <a class="btn btn-sm btn-default btn-hover-danger"><i class="fa fa-thumbs-down"></i></a>
                             </div>
                         </div>-->
-                        @{ if (User.Identity.IsAuthenticated && comment.UserId == int.Parse(User.Identity.Name))
+                        @{ if (User.Identity.IsAuthenticated && comment.UserId == Guid.Parse(userManager.GetUserId(User)))
                             {
                                 <form method="post" asp-controller="Article" asp-action="DeleteComment" asp-route-articleId="@ViewBag.Article.Id" asp-route-commentId="@comment.Id">
                                     <input type="submit" value="Delete">
