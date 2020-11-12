@@ -97,18 +97,23 @@ namespace Sneaker_Bar.Controllers
             Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
             List<Purchase> purchases = purchaseRepository.GetPurchaseByUserId(userId).ToList();
             List<Sneakers> sneakers = new List<Sneakers>();
+            double totalPrice = 0;
             foreach (Purchase purchase in purchases)
             {
-                sneakers.Add(sneakersRepository.GetSneakersById(purchase.SneakersId));
+                Sneakers sneaker = sneakersRepository.GetSneakersById(purchase.SneakersId);
+                totalPrice += sneaker.Price;
+                sneakers.Add(sneaker);
             }
+            ViewBag.totalPrice = totalPrice;
             ViewBag.sneakers = sneakers;
+
             return View();
         }
 
-        [HttpPost]
-        public IActionResult DeleteFromShoppingCart(int Id)
+   
+        public IActionResult DeleteFromShoppingCart(int sneakersId)
         {
-            purchaseRepository.DeletePurchaseById(Guid.Parse(userManager.GetUserId(HttpContext.User)), Id);
+            purchaseRepository.DeletePurchaseById(Guid.Parse(userManager.GetUserId(HttpContext.User)), sneakersId);
 
             return RedirectToAction("ShoppingCart", "Sneakers");
         }

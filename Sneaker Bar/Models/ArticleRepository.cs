@@ -23,10 +23,12 @@ namespace Sneaker_Bar.Models
         {
             List<Article> articles = getArticles();
             List<Article> latestArticles = new List<Article>();
-            for (int i = 0; i < 3; i++) {
+            int index = articles.Count > 3 ? 3 : articles.Count;
+
+            for (int i = 0; i < index; i++)
+            {
                 latestArticles.Add(articles[i]);
             }
-
             return latestArticles;
         }
 

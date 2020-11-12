@@ -1,5 +1,4 @@
-﻿
-a.navbar-brand {
+﻿a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
@@ -114,12 +113,26 @@ input .btn-primary {
 color:brown;
 font-weight:bold;
 }
-
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Goldman&family=Poppins&display=swap');
 @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
 
+.jumbotron {
+    background-image: url("https://mir-s3-cdn-cf.behance.net/project_modules/1400/4e483087953183.5dc80d7a56dbc.png");
+    background-size: cover;
+    color: white;
+    margin-right:45px;
+    margin-left:30px;
+}
+
+    .jumbotron h1 {
+        font-size: 5rem;
+        font-weight: 300;
+        line-height: 1.2;
+        margin-top: 50px;
+    }
+
 .baha1493 {
-    font-family: 'Open Sans', Arial, sans-serif;
     position: relative;
     float: left;
     overflow: hidden;
@@ -170,6 +183,7 @@ font-weight:bold;
     }
 
     .baha1493 .date {
+        font-family:"Goldman", cursive;
         background-color: #d2652d;
         top: 15px;
         color: #fff;
@@ -201,13 +215,22 @@ font-weight:bold;
     }
 
     .baha1493 a {
+        font-family: "Inconsolata", cursive;
+        font-size: 30px;
         margin-bottom: 10px;
         display: inline-block;
-        font-weight: 700;
+        font-weight: 400;
+        color: black;
+    }
+
+
+    .baha1493 a:hover {
+      color:black;
     }
 
     .baha1493 p {
-        font-size: 0.8em;
+        font-family: "Inconsolata", cursive;
+        font-size: 20px;
         margin-bottom: 20px;
         line-height: 1.6em;
     }
@@ -228,7 +251,8 @@ font-weight:bold;
         .baha1493 footer > div {
             display: inline-block;
             margin-right: 15px;
-        }
+            font-size:15px;
+         }
 
         .baha1493 footer i {
             margin-right: 5px;
@@ -241,7 +265,15 @@ font-weight:bold;
         -webkit-transform: translateX(0%);
         transform: translateX(0%);
     }
-   
 
 
-    
+
+.mb-3 p {
+    text-align: start;
+    margin-bottom: 0.5rem !important;
+}
+
+.mb-0 p {
+    margin:auto;
+    margin-bottom:20px;
+}

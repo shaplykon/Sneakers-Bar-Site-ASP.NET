@@ -5,41 +5,109 @@
     <a class="font-weight-bold">Your shopping cart is empy</a>
 }
 
-else
-{
-    foreach (Sneakers sneakers in ViewBag.sneakers)
-    {
-<div class="card w-25" style="margin-bottom: 30px;">
-    <img class="card-img-top" src="~/images/sneakers/@sneakers.ImageData" />
-    <div class="card-body">
-        <h5 class="card-title">
-            @sneakers.Company
-            @sneakers.Model
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-            @sneakers.ReleaseDate.ToShortDateString()
-        </h6>
-        <div class="card-text font-weight-bold">
-            @sneakers.Price$
+
+
+<!--Section: Block Content-->
+<section>
+
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-8">
+            @foreach (Sneakers sneakers in ViewBag.sneakers)
+            {
+                <!-- Card -->
+                <div class="card wish-list mb-3">
+                    <div class="card-body">
+
+                        <div class="row mb-4">
+                            <div class="col-md-5 col-lg-3 col-xl-3">
+                                <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                                    <img class="img-fluid w-100"
+                                         src="~/images/sneakers/@sneakers.ImageData" alt="Sample">
+
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-lg-9 col-xl-9">
+                                <div>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <p class="mb-3 text-muted text-uppercase small">Company: @sneakers.Company</p>
+                                            <p class="mb-2 text-muted text-uppercase small">Model: @sneakers.Model</p>
+                                            <p class="mb-3 text-muted text-uppercase small">Release date: @sneakers.ReleaseDate.ToShortDateString()</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+
+                                            <a class="card-link-secondary small text-uppercase mr-3" asp-controller="Sneakers" asp-action="DeleteFromShoppingCart" asp-route-senrakersId="@sneakers.Id">Detail</a>
+                                            
+
+
+                                        </div>
+                                        <p class="mb-0"><span><strong>@sneakers.Price$</strong></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+
+            <!-- Card -->
+            <!-- Card -->
+            <div class="card mb-3">
+                <div class="card-body">
+
+                    <h5 class="mb-4">We accept</h5>
+
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                         alt="Visa">
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+                         alt="American Express">
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                         alt="Mastercard">
+                    <img class="mr-2" width="45px"
+                         src="https://z9t4u9f6.stackpathcdn.com/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
+                         alt="PayPal acceptance mark">
+                </div>
+                <hr class="mb-4">
+
+            </div>
+
+
+        </div>
+        @if (ViewBag.sneakers.Count > 0)
+        {
+    <!--Grid column-->
+    <!--Grid column-->
+    <div class="col-lg-4">
+
+        <!-- Card -->
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <h5 class="mb-3">The total price of @ViewBag.sneakers.Count items is <span><strong>@ViewBag.totalPrice$</strong></span> </h5>
+                <form method="post" asp-controller="Sneakers" asp-action="ConfirmOrder">
+                    <input type="submit" asp-controller="Sneakers" asp-action="ConfirmOrder"
+                           class="btn btn-primary btn-block waves-effect waves-light" value="Confirm order" />
+                </form>
+
+            </div>
         </div>
 
-
-        <form method="post" asp-controller="Sneakers" asp-action="DeleteFromShoppingCart">
-            <input type="hidden" value="@sneakers.Id" name="Id" />
-            <input style="margin:auto" type="submit" asp-controller="Sneakers" asp-action="DeleteFromShoppingCart" class="btn btn-danger" value="Delete from shopping cart">
-        </form>
-
-
     </div>
-    <div class="card-footer">
-        <a asp-controller="Sneakers" asp-action="SneakersDetail" asp-route-id="@sneakers.Id">Detail</a>
+
+
+
+        }
     </div>
-</div>
-    }
-
-<form method="post" asp-controller="Sneakers" asp-action="ConfirmOrder">
-    <input type="submit" asp-controller="Sneakers" asp-action="ConfirmOrder" 
-           class="btn btn-success" value="Confirm order" />
-</form>
-
-}
+</section>

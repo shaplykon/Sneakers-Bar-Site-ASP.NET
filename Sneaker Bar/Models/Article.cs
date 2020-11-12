@@ -18,7 +18,9 @@ namespace Sneaker_Bar.Models
         public Guid UserId { get; set; }
         public string AuthorName { get; set; }
         public DateTime Date { get; set; }
- 
+        
+        public int Views { get; set; }
+        public int CommentsAmount { get; set; }
         
     }
 }

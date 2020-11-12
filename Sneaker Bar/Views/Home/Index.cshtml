@@ -22,11 +22,12 @@
 }
 
 <div class="jumbotron" style="margin-left:30px; margin-right:37px;">
-    <h1 class="display-4">Hello, world!</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+    <h1>Welcome!</h1>
+    <p class="lead">Visit our website and choose the sneakers you like.</p>
     <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    <p>We offer you to read the latest news in the industry.</p>
+    <a asp-controller="Article" asp-action="ArticleIndex" class="btn btn-primary btn-lg" role="button">Learn more</a>
+    
 </div>
 
 <div class="card-deck deck-index">
@@ -54,13 +55,13 @@
                         <div class="col-sm-6">
                             <form method="get" asp-controller="Sneakers" asp-action="SneakersEdit" asp-route-sneakersId="@sneakers.Id">
                                 <input type="hidden" value="@sneakers.Id" name="id" />
-                                <input type="submit" class="badge-dark" value="Edit" />
+                                <input type="submit" class="btn btn-success" value="Edit" />
                             </form>
                         </div>
                         <div class="col-sm-6">
                             <form method="post" asp-controller="Sneakers" asp-action="SneakersDelete" asp-route-sneakersId="@sneakers.Id">
                                 <input type="hidden" value="@sneakers.Id" name="id" />
-                                <input type="submit" class="badge-dark" value="Delete" />
+                                <input type="submit" class="btn btn-danger" value="Delete" />
                             </form>
                         </div>
                     </div>
@@ -90,17 +91,22 @@
         <figcaption>
             <div class="date"><span class="day">@article.Date.Day</span><span class="month">@article.Date.ToString("MMM", CultureInfo.InvariantCulture)</span></div>
 
-            <a asp-controller="Article" asp-action="ArticleDetail" asp-route-Id="@article.Id">@article.Text</a>
-            <p>
-                @article.Text
-            </p>
+            <a asp-controller="Article" asp-action="ArticleDetail" asp-route-Id="@article.Id">@article.Title</a>
             <footer>
-                <div class="views"><i class="ion-eye"></i>2,907</div>
-                <div class="comments"><i class="ion-chatboxes"></i>0</div>
+                <div class="views"><i class="ion-eye"></i>Views: @article.Views</div>
+                <div class="comments"><i class="ion-chatboxes"></i>Comments: @article.CommentsAmount</div>
             </footer>
             <p>
                 @article.AuthorName
             </p>
+            @if (User.IsInRole("admin"))
+            {
+                <form method="post" asp-controller="Article" asp-action="ArticleDelete" asp-route-articleId="@article.Id">
+                    <input type="hidden" value="@article.Id" name="id" />
+                    <input type="submit" class="btn btn-danger" value="Delete" style="margin-bottom: 20px;" />
+                </form>
+            }
+
         </figcaption>
     </figure>
 }

@@ -41,7 +41,6 @@ namespace Sneaker_Bar.Controllers
         [HttpPost]
         public IActionResult ArticleEdit(ArticleViewModel viewModel)
         {
-
             if (ModelState.IsValid)
             {
                 string uniqueFileName = UploadedFile(viewModel);
@@ -82,6 +81,8 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ArticleDetail(int Id)
         {
             Article article = articleRepository.getArticleById(Id);
+            article.Views++;
+            articleRepository.SaveArticle(article);
             List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();
             ViewBag.Article = article;
             ViewBag.Comments = comments;
@@ -99,14 +100,33 @@ namespace Sneaker_Bar.Controllers
                 comment.UserId = userId;
                 comment.AuthorName = HttpContext.User.Identity.Name;
                 commentRepository.SaveComment(comment);
+                Article article = articleRepository.getArticleById(articleId);
+                article.CommentsAmount++;
+                articleRepository.SaveArticle(article);
             }
-            return RedirectToAction("ArticleDetail", "Article" , new { Id = articleId });
+            return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
         [HttpPost]
         public IActionResult DeleteComment(int commentId, int articleId)
         {
+            Article article = articleRepository.getArticleById(articleId);
+            article.CommentsAmount--;
+            articleRepository.SaveArticle(article);
             commentRepository.DeleteCommentById(commentId);
-            return RedirectToAction("ArticleDetail","Article" ,new { Id = articleId });
+            return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
+        }
+
+        [HttpGet]
+        public IActionResult ArticleIndex() {
+            List<Article> articles = articleRepository.getArticles();
+            ViewBag.Articles = articles;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ArticleDelete(int articleId) {
+            articleRepository.DeleteArticle(articleRepository.getArticleById(articleId));
+            return RedirectToAction("Index", "Home");
         }
     }
 }
