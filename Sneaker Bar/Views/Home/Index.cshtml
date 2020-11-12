@@ -2,8 +2,13 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+@using System.Globalization;
 @using Microsoft.AspNetCore.Identity;
 @inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager;
+
 @if (User.IsInRole("admin"))
 {
     <div class="text-center">
@@ -68,23 +73,34 @@
 
         </div>
     }
+
+
+
 </div>
+
+@if (ViewBag.Articles.Count > 0)
+{
+    <h1 class="center">Latest news</h1>
+}
 
 @foreach (Article article in ViewBag.Articles)
 {
-    <div class="row">
-        <a asp-controller="Article" asp-action="ArticleDetail" asp-route-Id="@article.Id">@article.Text</a>
-    </div>
-    <div class="row">
-        <a>@article.Title</a>
-    </div>
-    <div class="row">
-        <a>@article.Date</a>
-    </div>
-    <div class="row">
-        <a>Username: @article.AuthorName</a>
-    </div>
-    <div class="row">
-        <img class="img" src="~/images/articles/@article.ImageData" />
-    </div>
+    <figure class="baha1493">
+        <div class="image"><img src="~/images/articles/@article.ImageData" alt="ls-sample1" /></div>
+        <figcaption>
+            <div class="date"><span class="day">@article.Date.Day</span><span class="month">@article.Date.ToString("MMM", CultureInfo.InvariantCulture)</span></div>
+
+            <a asp-controller="Article" asp-action="ArticleDetail" asp-route-Id="@article.Id">@article.Text</a>
+            <p>
+                @article.Text
+            </p>
+            <footer>
+                <div class="views"><i class="ion-eye"></i>2,907</div>
+                <div class="comments"><i class="ion-chatboxes"></i>0</div>
+            </footer>
+            <p>
+                @article.AuthorName
+            </p>
+        </figcaption>
+    </figure>
 }

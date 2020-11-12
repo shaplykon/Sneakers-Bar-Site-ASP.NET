@@ -1,13 +1,11 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
+﻿
 a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
 }
 
-/* Provide sufficient contrast against white background */
+
 a {
     color: #0366d6;
 }
@@ -24,8 +22,7 @@ a {
     border-color: #1861ac;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
+
 html {
     font-size: 14px;
 }
@@ -53,15 +50,13 @@ button.accept-policy {
     line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
+
 html {
     position: relative;
     min-height: 100%;
 }
 
 body {
-    /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
 
@@ -70,7 +65,8 @@ body {
     bottom: 0;
     width: 100%;
     white-space: nowrap;
-    line-height: 60px; /* Vertically center the text there */
+    line-height: 60px;
+
 }
 
 h4 {
@@ -113,3 +109,139 @@ input .btn-primary {
     margin:auto;
     margin-top:10px;
 }
+
+.article-title {
+color:brown;
+font-weight:bold;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
+@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+
+.baha1493 {
+    font-family: 'Open Sans', Arial, sans-serif;
+    position: relative;
+    float: left;
+    overflow: hidden;
+    margin: 10px 1%;
+    min-width: 250px;
+    max-width: 290px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    text-align: left;
+    font-size: 16px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    margin-left:40px;
+    margin-right:40px;
+    margin-bottom:80px;
+}
+
+    .baha1493 * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .baha1493:after {
+        position: absolute;
+        top: 12px;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 25px 0 25px 25px;
+        border-color: transparent transparent transparent #d2652d;
+        content: '';
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+        -webkit-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    }
+
+    .baha1493 img {
+        max-width: 100%;
+        vertical-align: top;
+        position: relative;
+    }
+
+    .baha1493 figcaption {
+        padding: 20px 20px 30px;
+        background-color: #ffffff;
+    }
+
+    .baha1493 .date {
+        background-color: #d2652d;
+        top: 15px;
+        color: #fff;
+        right: 15px;
+        min-height: 48px;
+        min-width: 48px;
+        position: absolute;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-radius: 50%;
+        padding: 10px 0;
+    }
+
+        .baha1493 .date span {
+            display: block;
+            line-height: 14px;
+        }
+
+        .baha1493 .date .month {
+            font-size: 11px;
+        }
+
+    .baha1493 a,
+    .baha1493 p {
+        margin: 0;
+        padding: 0;
+    }
+
+    .baha1493 a {
+        margin-bottom: 10px;
+        display: inline-block;
+        font-weight: 700;
+    }
+
+    .baha1493 p {
+        font-size: 0.8em;
+        margin-bottom: 20px;
+        line-height: 1.6em;
+    }
+
+    .baha1493 footer {
+        padding: 0 25px;
+        color: #999999;
+        font-size: 0.8em;
+        line-height: 50px;
+        text-align: left;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+    }
+
+        .baha1493 footer > div {
+            display: inline-block;
+            margin-right: 15px;
+        }
+
+        .baha1493 footer i {
+            margin-right: 5px;
+            font-size: 1.2em;
+        }
+
+
+    .baha1493:hover:after,
+    .baha1493.hover:after {
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+   
+
+
+    

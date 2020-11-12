@@ -17,7 +17,8 @@ namespace Sneaker_Bar.Controllers
         public ActionResult Index()
         {
             var Sneakers = sneakersRepository.GetSneakers();
-            var Articles = articleRepository.getArticles();
+            var Articles = articleRepository.getLatestArticles();
+      
             ViewBag.Sneakers = Sneakers;
             ViewBag.Articles = Articles;
             return View();

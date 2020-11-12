@@ -13,8 +13,21 @@ namespace Sneaker_Bar.Models
         {
             context = _context; 
         }
-        public IQueryable<Article> getArticles() {
-            return context.Articles.OrderBy(x => x.Date);
+        public List<Article> getArticles()
+        {
+            List<Article> articles = context.Articles.OrderBy(x => x.Date).ToList<Article>();
+            articles.Reverse();
+            return articles;
+        }
+        public List<Article> getLatestArticles()
+        {
+            List<Article> articles = getArticles();
+            List<Article> latestArticles = new List<Article>();
+            for (int i = 0; i < 3; i++) {
+                latestArticles.Add(articles[i]);
+            }
+
+            return latestArticles;
         }
 
         public Article getArticleById(int Id) {
@@ -35,7 +48,7 @@ namespace Sneaker_Bar.Models
             return article.Id;
         }
 
-        public void DeleteSneakers(Article article)
+        public void DeleteArticle(Article article)
         {
             context.Articles.Remove(article);
             context.SaveChanges();
