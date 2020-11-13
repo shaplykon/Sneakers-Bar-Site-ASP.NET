@@ -179,12 +179,65 @@ namespace Sneaker_Bar.Controllers
         }
 
         [HttpPost]
-        public async System.Threading.Tasks.Task<IActionResult> ConfirmOrderAsync() {
+        public async System.Threading.Tasks.Task<IActionResult> ConfirmOrderAsync(double totalPrice) {
             String email = User.Identity.Name;
-            
+
+            List<Sneakers> orderList = new List<Sneakers>();
+            List<Purchase> purchases = purchaseRepository.GetPurchaseByUserId(Guid.Parse(userManager.GetUserId(HttpContext.User)));
+            foreach (Purchase purchase in purchases) {
+                orderList.Add(sneakersRepository.GetSneakersById(purchase.SneakersId));
+            }
+        
             MailService mailService = new MailService();
-            await mailService.SendEmailAsync(email, "loh", "loh");
+            await mailService.SendEmailAsync(email, "Order confirmation message", BuildPreConfirmationMessage(email, totalPrice, orderList));
             return RedirectToAction("OrderConfirmation");
+        }
+        [HttpGet]
+        public async System.Threading.Tasks.Task<IActionResult> OrderConfirmationAsync(Guid Id)
+        {
+            ViewBag.PurchaseId = Id.ToString();
+            String email = User.Identity.Name;
+            if (Id != Guid.Empty) {
+               List<Purchase> purchases =  purchaseRepository.GetPurchaseByUserId(Guid.Parse(userManager.GetUserId(HttpContext.User)));
+                foreach (Purchase purchase in purchases) {
+                    purchaseRepository.DeletePurchase(purchase);
+                }
+                MailService mailService = new MailService();
+                await mailService.SendEmailAsync(email, "Order confirmation message", BuildConfirmationMessage(email));
+            }
+            return View();
+        }
+
+
+        private string BuildConfirmationMessage(string email) {
+
+            string message = "<h1> <p>" + email + ", our order was successfully confrirmed!</p>\n";
+            message += "<p>Order date: " + DateTime.Now.ToString();
+            return message;
+        }
+
+
+        private string BuildPreConfirmationMessage(string email, double totalPrice, List<Sneakers> orderList)
+        {
+
+            string message = "<h1> <p>" + email + ", check your order information!</p>\n"
+                + " <p>Total price is " + totalPrice.ToString() + "$ (" + orderList.Count + " items)" + "</p>";
+            message += "<ol>";
+            foreach (Sneakers sneakers in orderList)
+            {
+                message += "<li>";
+                message += sneakers.Company + " ";
+                message += sneakers.Model;
+                message += "</li>";
+            }
+            message += "</ol>";
+
+            message += "<p>Order date: " + DateTime.Now.ToString();
+  
+            message  += "<p><a href = \"" + Request.Scheme + "://" + Request.Host.Value + "/Sneakers/OrderConfirmation/" + Guid.Parse(userManager.GetUserId(HttpContext.User)) +
+                "\">Click this link to confirm your order!</ a >";
+           
+            return message;
         }
     }
 }

@@ -78,6 +78,10 @@ namespace Sneaker_Bar
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "confirmation",
+                    pattern: "{controller=Sneakers}/{action=OrderConfirmation}/{id?}");
+               
                 endpoints.MapRazorPages();
             });
         }

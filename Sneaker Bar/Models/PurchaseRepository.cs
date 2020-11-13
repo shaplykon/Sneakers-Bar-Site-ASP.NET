@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -19,9 +20,9 @@ namespace Sneaker_Bar.Models
             return context.Purchases.OrderBy(x => x.Date);
         }
 
-        public IQueryable<Purchase> GetPurchaseByUserId(Guid Id)
+        public List<Purchase> GetPurchaseByUserId(Guid Id)
         {
-            return context.Purchases.Where(x => x.UserId == Id);
+            return context.Purchases.Where(x => x.UserId == Id).ToList();
         }
 
         public IQueryable<Purchase> GetPurchaseBySneakersId(int Id)

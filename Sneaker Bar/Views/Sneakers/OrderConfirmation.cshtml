@@ -1,0 +1,8 @@
+﻿@if (@Guid.Parse(ViewBag.PurchaseId) == Guid.Empty)
+{
+    <h1>Follow the instruction in your email <a href="https://mail.google.com/mail/u/0/ "> @User.Identity.Name</a>!</h1>
+}
+else
+{
+    <h1>Your order was successfully confirmed!</h1>
+}

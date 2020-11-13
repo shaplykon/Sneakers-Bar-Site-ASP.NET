@@ -11,7 +11,7 @@ namespace Sneaker_Bar.Controllers
     {
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-                var emailMessage = new MimeMessage();
+            var emailMessage = new MimeMessage();
 
             emailMessage.From.Add(new MailboxAddress("Администрация сайта", "shoplykon.bsuir@gmail.com"));
             emailMessage.To.Add(new MailboxAddress("", email));
