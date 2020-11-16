@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@if (ViewBag.title == null)
+{
+<h1>An error occured while processing your request</h1>
+<h6>Contact us on shaplykon@gmail.com</h6>
+}
+else { 
+<h1 class="text-danger">@ViewBag.title</h1>
+<h6 class="text-danger">@ViewBag.message</h6>
+}
+<a asp-controller="Home" asp-action="Index">Visit main page</a>

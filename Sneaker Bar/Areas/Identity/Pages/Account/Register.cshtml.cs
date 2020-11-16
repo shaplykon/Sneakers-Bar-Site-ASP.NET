@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace WebApplication1.Areas.Identity.Pages.Account
 {
@@ -27,12 +28,12 @@ namespace WebApplication1.Areas.Identity.Pages.Account
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+             ILogger<RegisterModel> logger)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;            
             _emailSender = emailSender;
         }
 
@@ -79,7 +80,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "user");
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("User {0} created a new account with password.", Input.Email);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

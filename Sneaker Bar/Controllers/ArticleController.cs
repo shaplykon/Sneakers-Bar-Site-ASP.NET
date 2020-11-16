@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
@@ -8,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -18,17 +18,20 @@ namespace Sneaker_Bar.Controllers
         CommentRepository commentRepository;
         private IWebHostEnvironment webHostEnvironment;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ILogger<ArticleController> logger;
 
         public ArticleController(
             ArticleRepository _articleRepository,
             IWebHostEnvironment _webHostEnvironment,
             CommentRepository _commentRepository,
-            UserManager<IdentityUser> _userManager)
+            UserManager<IdentityUser> _userManager,
+            ILogger<ArticleController> _logger)
         {
             commentRepository = _commentRepository;
             articleRepository = _articleRepository;
             webHostEnvironment = _webHostEnvironment;
             userManager = _userManager;
+            logger = _logger;
         }
 
         [HttpGet]
@@ -55,6 +58,7 @@ namespace Sneaker_Bar.Controllers
                     ImageData = uniqueFileName,
                     AuthorName = HttpContext.User.Identity.Name
                 };
+                logger.LogInformation("Article with Id {0} was edited", viewModel.Id);
                 articleRepository.SaveArticle(article);
                 return RedirectToAction("Index", "Home");
             }
@@ -103,6 +107,10 @@ namespace Sneaker_Bar.Controllers
                 Article article = articleRepository.getArticleById(articleId);
                 article.CommentsAmount++;
                 articleRepository.SaveArticle(article);
+                logger.LogInformation("Successfully added comment for article with Id {0}", articleId);
+            }
+            else {
+                logger.LogWarning("Incorrect comment input for article with Id {0}", articleId);
             }
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
@@ -113,6 +121,7 @@ namespace Sneaker_Bar.Controllers
             article.CommentsAmount--;
             articleRepository.SaveArticle(article);
             commentRepository.DeleteCommentById(commentId);
+            logger.LogWarning("Comment with Id {0} was deleted", commentId);
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
 

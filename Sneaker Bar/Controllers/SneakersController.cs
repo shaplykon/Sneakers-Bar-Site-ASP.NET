@@ -233,7 +233,7 @@ namespace Sneaker_Bar.Controllers
             message += "</ol>";
 
             message += "<p>Order date: " + DateTime.Now.ToString();
-  
+   
             message  += "<p><a href = \"" + Request.Scheme + "://" + Request.Host.Value + "/Sneakers/OrderConfirmation/" + Guid.Parse(userManager.GetUserId(HttpContext.User)) +
                 "\">Click this link to confirm your order!</ a >";
            
