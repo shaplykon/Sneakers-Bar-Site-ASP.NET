@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.Extensions.Logging;
 
 namespace Sneaker_Bar.Controllers
@@ -40,16 +38,22 @@ namespace Sneaker_Bar.Controllers
         public IActionResult SneakersDetail(int Id)
         {
             Sneakers sneakers;
-            try
+            if (webHostEnvironment.EnvironmentName.Equals("Production"))
             {
-                sneakers = sneakersRepository.GetSneakersById(Id);
+                try
+                {
+                    sneakers = sneakersRepository.GetSneakersById(Id);
+                }
+                catch (InvalidOperationException)
+                {
+                    logger.LogError("Error occured while trying to get sneakers with Id: {0}", Id);
+                    ViewBag.title = "Requsted sneakers were not found";
+                    ViewBag.message = "It is probably a mistake in your request";
+                    return View("Error");
+                }
             }
-            catch (InvalidOperationException)
-            {
-                logger.LogError("Error occured while trying to get sneakers with Id: {0}", Id);
-                ViewBag.title = "Requsted sneakers were not found";
-                ViewBag.message = "It is probably a mistake in your request";
-                return View("Error");
+            else {
+                sneakers = sneakersRepository.GetSneakersById(Id);
             }
             ViewBag.sneakers = sneakers;
 

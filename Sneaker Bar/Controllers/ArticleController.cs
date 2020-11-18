@@ -85,17 +85,25 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ArticleDetail(int Id)
         {
             Article article;
-            try
+            if (webHostEnvironment.EnvironmentName.Equals("Production"))
             {
-                article = articleRepository.getArticleById(Id);
+                try
+                {
+                    article = articleRepository.getArticleById(Id);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError($"Error occured while trying to get article with Id: {Id}. Exception message: {e.Message}");
+                    ViewBag.title = "Requsted article were not found";
+                    ViewBag.message = "It is probably a mistake in your request";
+                    return View("Error");
+                }
             }
-            catch (Exception)
-            {
-                logger.LogError("Error occured while trying to get article with Id: {0}", Id);
-                ViewBag.title = "Requsted article were not found";
-                ViewBag.message = "It is probably a mistake in your request";
-                return View("Error");
+            else { 
+                article = articleRepository.getArticleById(Id); 
             }
+
+
             article.Views++;
             articleRepository.SaveArticle(article);
             List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();

@@ -14,13 +14,11 @@ namespace Sneaker_Bar.Models
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Sneakers> Sneakers { get; set; }
 
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
            : base(options)
         {
        //         Database.EnsureCreated();
         }
-
 
         protected override void OnModelCreating(ModelBuilder ModelBuilder)
         {
