@@ -13,7 +13,8 @@ namespace Sneaker_Bar.Controllers
             SneakersRepository _sneakersRepository, 
             ArticleRepository _articleRepository,
             ILogger<HomeController> logger)
-        {               
+        {
+            logger.LogInformation("Home page visited");
             articleRepository = _articleRepository;
             sneakersRepository = _sneakersRepository;
         }
