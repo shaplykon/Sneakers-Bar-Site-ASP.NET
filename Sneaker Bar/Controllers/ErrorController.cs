@@ -26,24 +26,6 @@ namespace Sneaker_Bar.Controllers
             return View($"Error-{statusCode}");
         }
 
-        [Route("/Error/")]
-        [AllowAnonymous]
-        public IActionResult Error() {
-            try
-            {
-                var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-                logger.LogError($"Path {exceptionDetails.Path} threw an exception " +
-                    $"{exceptionDetails.Error}");
-            }
-            catch (Exception ex) {
-                logger.LogError($"Exception was thrown: " +
-                      $"{ex.Message}");
-                ViewBag.title = "Error occured";
-                ViewBag.message = "We work to fix this problem";
-            }
-            return View("Error");
-        }
-
-
+      
     }
 }

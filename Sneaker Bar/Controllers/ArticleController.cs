@@ -84,7 +84,18 @@ namespace Sneaker_Bar.Controllers
         [HttpGet]
         public IActionResult ArticleDetail(int Id)
         {
-            Article article = articleRepository.getArticleById(Id);
+            Article article;
+            try
+            {
+                article = articleRepository.getArticleById(Id);
+            }
+            catch (Exception)
+            {
+                logger.LogError("Error occured while trying to get article with Id: {0}", Id);
+                ViewBag.title = "Requsted article were not found";
+                ViewBag.message = "It is probably a mistake in your request";
+                return View("Error");
+            }
             article.Views++;
             articleRepository.SaveArticle(article);
             List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();

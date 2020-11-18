@@ -10,6 +10,7 @@ using Sneaker_Bar.ViewModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.Extensions.Logging;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -20,12 +21,14 @@ namespace Sneaker_Bar.Controllers
         CommentRepository commentRepository;
         IWebHostEnvironment webHostEnvironment;
         UserManager<IdentityUser> userManager;
+        ILogger<SneakersController> logger;
 
         public SneakersController(
             SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
             CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment,
-                    UserManager<IdentityUser> _userManager)
+                    UserManager<IdentityUser> _userManager, ILogger<SneakersController> _logger)
         {
+            logger = _logger;
             userManager = _userManager;
             webHostEnvironment = _webHostEnvironment;
             commentRepository = _commentRepository;
@@ -36,14 +39,18 @@ namespace Sneaker_Bar.Controllers
         [HttpGet]
         public IActionResult SneakersDetail(int Id)
         {
-            Sneakers sneakers = sneakersRepository.GetSneakersById(Id);
-
-            /* if (sneakers.commentIds.Count() > 0)
-             {
-                 List<Comment> comments = commentRepository.getCommentsByIdArray(sneakers.commentIds);
-                 ViewBag.comments = comments;
-             }*/
-
+            Sneakers sneakers;
+            try
+            {
+                sneakers = sneakersRepository.GetSneakersById(Id);
+            }
+            catch (InvalidOperationException)
+            {
+                logger.LogError("Error occured while trying to get sneakers with Id: {0}", Id);
+                ViewBag.title = "Requsted sneakers were not found";
+                ViewBag.message = "It is probably a mistake in your request";
+                return View("Error");
+            }
             ViewBag.sneakers = sneakers;
 
             if (User.Identity.IsAuthenticated)

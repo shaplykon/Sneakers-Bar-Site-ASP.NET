@@ -33,7 +33,7 @@ namespace Sneaker_Bar.Models
         }
 
         public Article getArticleById(int Id) {
-            return context.Articles.Where(x => x.Id == Id).FirstOrDefault();
+            return context.Articles.Single(x => x.Id == Id);
         }
 
         public int SaveArticle(Article article)
