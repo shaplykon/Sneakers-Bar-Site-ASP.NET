@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+
+@inject UserManager<IdentityUser> userManager;
+
+<h1>Managers</h1>
+@{int counter = 1; }
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Edit</th>
+        </tr>
+    </thead>
+    <caption>List of managers</caption>
+    <tbody>
+        @foreach (IdentityUser user in ViewBag.users)
+        {
+            if (userManager.GetRolesAsync(user).Result.Contains("manager"))
+            {@using (Html.BeginForm("EditUser", "Manage", FormMethod.Post))
+                {
+                    <tr>
+                        <th scope="row">@counter</th>
+                        <td> @user.UserName</td>
+                        @Html.Hidden("userId", user.Id.ToString())
+                        @Html.Hidden("role", "manager")
+                        <td><button name="action" class="btn btn-danger" value="delete">Delete</button></td>
+                        <td><button name="action" class="btn btn-warning" value="edit">Deprive manager role</button></td>
+                    </tr>
+                    counter += 1;
+                }
+        }
+    }
+    </tbody>
+</table>
+
+<h1>Users</h1>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Edit</th>
+        </tr>
+    </thead>
+    <caption>List of users</caption>
+
+    <tbody>
+        @{counter = 1; }
+        @foreach (IdentityUser user in ViewBag.users)
+        {
+            if (userManager.GetRolesAsync(user).Result.Contains("user"))
+            {@using (Html.BeginForm("EditUser", "Manage", FormMethod.Post))
+                {
+                    <tr>
+                        <th scope="row">@counter</th>
+                        <td> @user.UserName</td>
+                        @Html.Hidden("userId", user.Id.ToString())
+                        @Html.Hidden("role", "user")
+                        <td><button name="action" class="btn btn-danger" value="delete">Delete</button></td>
+                        <td><button name="action" class="btn btn-warning" value="edit">Give manager role</button></td>
+                    </tr>
+                    counter += 1;
+                }
+        }
+    }
+    </tbody>
+</table>

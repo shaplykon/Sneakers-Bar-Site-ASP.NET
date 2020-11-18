@@ -133,6 +133,7 @@ namespace Sneaker_Bar.Controllers
             }
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
         [HttpPost]
         public IActionResult DeleteComment(int commentId, int articleId)
         {
@@ -151,6 +152,7 @@ namespace Sneaker_Bar.Controllers
             return View();
         }
 
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
         [HttpPost]
         public IActionResult ArticleDelete(int articleId) {
             articleRepository.DeleteArticle(articleRepository.getArticleById(articleId));

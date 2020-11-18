@@ -1,5 +1,4 @@
-﻿using Sneaker_Bar.Models;  // пространство имен модели User
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 namespace Sneaker_Bar
@@ -17,6 +16,10 @@ namespace Sneaker_Bar
             if (await roleManager.FindByNameAsync("user") == null)
             {
                 await roleManager.CreateAsync(new IdentityRole("user"));
+            }
+            if (await roleManager.FindByNameAsync("manager") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("manager"));
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {

@@ -9,7 +9,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager;
 
-@if (User.IsInRole("admin"))
+@if (User.IsInRole("admin") || User.IsInRole("manager"))
 {
     <div class="text-center">
         <a asp-controller="Sneakers" asp-action="SneakersEdit">Add snickers</a>
@@ -27,7 +27,7 @@
     <hr class="my-4">
     <p>We offer you to read the latest news in the industry.</p>
     <a asp-controller="Article" asp-action="ArticleIndex" class="btn btn-primary btn-lg" role="button">Learn more</a>
-    
+
 </div>
 
 <div class="card-deck deck-index">
@@ -99,7 +99,7 @@
             <p>
                 @article.AuthorName
             </p>
-            @if (User.IsInRole("admin"))
+            @if (User.IsInRole("admin") || User.IsInRole("manager"))
             {
                 <form method="post" asp-controller="Article" asp-action="ArticleDelete" asp-route-articleId="@article.Id">
                     <input type="hidden" value="@article.Id" name="id" />

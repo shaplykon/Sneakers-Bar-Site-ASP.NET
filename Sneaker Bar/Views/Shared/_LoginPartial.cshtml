@@ -21,6 +21,14 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Sneakers" asp-action="ShoppingCart">Shopping cart</a>
             </li>
         }
+
+        @if (User.IsInRole("admin"))
+        {
+
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="Index">Manage</a>
+            </li>
+        }
     }
     else
     {

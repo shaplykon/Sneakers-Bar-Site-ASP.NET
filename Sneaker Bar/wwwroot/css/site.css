@@ -68,9 +68,7 @@ body {
 
 }
 
-h4 {
-    font-style: italic;
-}
+
 
 .right {
     position: absolute;
@@ -215,7 +213,7 @@ font-weight:bold;
     }
 
     .baha1493 a {
-        font-family: "Inconsolata", cursive;
+
         font-size: 30px;
         margin-bottom: 10px;
         display: inline-block;
