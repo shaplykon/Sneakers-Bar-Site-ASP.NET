@@ -17,7 +17,7 @@ namespace Sneaker_Bar.Model
 
         public IQueryable<Comment> getCommentsByArticleId(int Id)
         {
-            return context.Comments.Where(x => x.ArticleId == Id);
+            return context.Comments.Where(x => x.ArticleId == Id).OrderByDescending(x=>x.Date);
         }
 
         public Comment getCommentById(int Id)

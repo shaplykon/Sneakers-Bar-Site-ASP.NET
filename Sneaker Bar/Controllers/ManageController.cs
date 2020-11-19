@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Sneaker_Bar.Controllers
 {
-
     public class ManageController : Controller
     {
         private UserManager<IdentityUser> userManager;

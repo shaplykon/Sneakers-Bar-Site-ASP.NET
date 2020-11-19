@@ -38,6 +38,7 @@ namespace Sneaker_Bar
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = false;
+                options.Password.RequireNonAlphanumeric = false;
             }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
