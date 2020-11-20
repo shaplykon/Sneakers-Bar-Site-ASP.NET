@@ -173,6 +173,23 @@
         "lib/index.js",
         "lib/index.min.js"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/js/signalr/",
+      "files": [
+        "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "util@0.12.3",
+      "destination": "wwwroot/js/signalr/dist/util/",
+      "files": [
+        "util.js",
+        "util.min.js"
+      ]
     }
   ]
 }

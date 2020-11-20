@@ -18,7 +18,9 @@
     <div class="text-center">
         <a asp-controller="Article" asp-action="ArticleEdit">Add article</a>
     </div>
-
+    <div class="text-center">
+        <input type="submit" id="btn" value="penis">
+    </div>
 }
 
 <div class="jumbotron" style="margin-left:30px; margin-right:37px;">
@@ -75,7 +77,11 @@
         </div>
     }
 
-
+    <script>
+        document.getElementById("btn").addEventListener("click", function (e) {
+            openConnection();
+        });
+    </script>
 
 </div>
 

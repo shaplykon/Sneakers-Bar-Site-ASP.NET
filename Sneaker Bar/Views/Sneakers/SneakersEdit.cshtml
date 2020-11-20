@@ -1,63 +1,73 @@
 ﻿@model Sneaker_Bar.Models.Sneakers
-<div>
-    <h1>Edit Sneakers</h1>
+    <div>
+        <h1>Edit Sneakers</h1>
 
-    <form asp-controller="Sneakers" asp-action="SneakersEdit" method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="Id" />
+        <form asp-controller="Sneakers" asp-action="SneakersEdit" name="sneakers-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
 
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" asp-for="Company"></label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" asp-for="Company" />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="Company"></label>
+                <div class="col-sm-6">
+                    <input id="company" type="text" class="form-control" asp-for="Company" />
+                </div>
+                <span asp-validation-for="Company"></span>
             </div>
-            <span asp-validation-for="Company"></span>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" asp-for="Model"></label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" asp-for="Model" />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="Model"></label>
+                <div class="col-sm-6">
+                    <input id="model" type="text" class="form-control" asp-for="Model" />
+                </div>
+                <span asp-validation-for="Model"></span>
             </div>
-            <span asp-validation-for="Model"></span>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" asp-for="Price"></label>
-            <div class="col-sm-6">
-                <input type="number" class="form-control" asp-for="Price" />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="Price"></label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" asp-for="Price" />
+                </div>
+                <span asp-validation-for="Price"></span>
             </div>
-            <span asp-validation-for="Price"></span>
-        </div>
 
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" asp-for="ReleaseDate"></label>
-            <div class="col-sm-6">
-                <input type="date" class="form-control" asp-for="ReleaseDate" />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="ReleaseDate"></label>
+                <div class="col-sm-6">
+                    <input type="date" class="form-control" asp-for="ReleaseDate" />
+                </div>
+                <span asp-validation-for="ReleaseDate"></span>
             </div>
-            <span asp-validation-for="ReleaseDate"></span>
-        </div>
 
 
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" asp-for=ImageData></label>
-            <div class="col-sm-6">
-                <input type="file" class="form-control" asp-for="ImageData" />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for=ImageData></label>
+                <div class="col-sm-6">
+                    <input type="file" class="form-control" asp-for="ImageData" />
+                </div>
+                <span asp-validation-for="ImageData" class="text-danger"></span>
             </div>
-            <span asp-validation-for="ImageData" class="text-danger"></span>
-        </div>
 
 
-        @if (Model != null && Model.ImageData != null)
-        {
+            @if (Model != null && Model.ImageData != null)
+            {
+                <div class="col-sm-8">
+                    <img class="img-thumbnail" src="~/images/sneakers/@Model.ImageData"
+                         asp-append-version="true" id="imageInput" />
+                </div>
+            }
             <div class="col-sm-8">
-                <img class="img-thumbnail" src="~/images/sneakers/@Model.ImageData"
-                     asp-append-version="true" id="imageInput" />
+                <div class="form-group row">
+                    <input type="submit" id="save" value="Save" class="btn btn-primary" style="margin-top:10px; margin:auto" />
+                </div>
             </div>
-        }
-        <div class="col-sm-8">
-            <div class="form-group row"> 
-                <input type="submit" value="Save" class ="btn btn-primary" style="margin-top:10px; margin:auto" />
-            </div>
-        </div>
 
 
-    </form>
-</div>
+        </form>
+
+        <input type="button" id="btn" value="Отправить" />
+
+        <script>
+            document.getElementById("btn").addEventListener("click", function (e) {
+                openConnection();
+            });
+        </script>
+
+    </div>
+

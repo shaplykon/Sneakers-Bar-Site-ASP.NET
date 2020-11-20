@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.Model;
+using Sneaker_Bar.Hubs;
 
 namespace Sneaker_Bar
 {
@@ -28,6 +29,7 @@ namespace Sneaker_Bar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("connectionString")));
 
             services.AddDefaultIdentity<IdentityUser>(options =>
@@ -84,7 +86,7 @@ namespace Sneaker_Bar
                 endpoints.MapControllerRoute(
                     name: "confirmation",
                     pattern: "{controller=Sneakers}/{action=OrderConfirmation}/{id?}");
-               
+                endpoints.MapHub<NotificationHub>("/notification");
                 endpoints.MapRazorPages();
             });
         }
