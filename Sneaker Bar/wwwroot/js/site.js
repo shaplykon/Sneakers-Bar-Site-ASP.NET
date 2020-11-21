@@ -1,28 +1,21 @@
-﻿function sendNotification(title, options) {
-    // Проверим, поддерживает ли браузер HTML5 Notifications
+﻿function showNotification(title, options) {
     if (!("Notification" in window)) {
         alert('Ваш браузер не поддерживает HTML Notifications, его необходимо обновить.');
     }
-
-    // Проверим, есть ли права на отправку уведомлений
     else if (window.Notification.permission === "granted") {
-        // Если права есть, отправим уведомление
         var notification = new window.Notification(title, options);
-
-        function clickFunc() { alert('Пользователь кликнул на уведомление'); }
-
+        function clickFunc() {
+            window.open("/");
+        }
         notification.onclick = clickFunc;
     }
 
-    // Если прав нет, пытаемся их получить
     else if (window.Notification.permission !== 'denied') {
         window.Notification.requestPermission(function (permission) {
-            // Если права успешно получены, отправляем уведомление
             if (permission === "granted") {
                 var notification = new window.Notification(title, options);
-
             } else {
-                alert('Вы запретили показывать уведомления'); // Юзер отклонил наш запрос на показ уведомлений
+                alert('Вы запретили показывать уведомления');
             }
         }
         );
@@ -33,23 +26,20 @@ const hubConnection = new signalR.HubConnectionBuilder()
     .withUrl("/notification")
     .build();
 
+hubConnection.start();
 
-
-hubConnection.on('Send', function (message, userName) {
-    // получение сообщения от сервера
-    alert("hui");
-    sendNotification('Верните Линуса!', {
-        body: 'Тестирование HTML5 Notifications',
-        icon: 'icon.jpg',
+hubConnection.on('Send', function (message) {
+    showNotification("Sneakers notification", {
+        body: message,
+        icon: src ="https://mir-s3-cdn-cf.behance.net/project_modules/1400/4e483087953183.5dc80d7a56dbc.png",
         dir: 'auto'
     });
 });
 
-hubConnection.start();
-
-
-
-
-function openConnection() {
-    hubConnection.invoke("Send", "123");
+function sendNotification(company, model) {
+    hubConnection.invoke("Send", company, model);
 }
+
+
+
+

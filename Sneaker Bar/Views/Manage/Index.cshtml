@@ -20,7 +20,7 @@
         {
             if (userManager.GetRolesAsync(user).Result.Contains("manager"))
             {@using (Html.BeginForm("EditUser", "Manage", FormMethod.Post))
-                {
+              {
                     <tr>
                         <th scope="row">@counter</th>
                         <td> @user.UserName</td>
@@ -30,8 +30,8 @@
                         <td><button name="action" class="btn btn-warning" value="edit">Deprive manager role</button></td>
                     </tr>
                     counter += 1;
-                }
-        }
+              }
+         }
     }
     </tbody>
 </table>
@@ -64,8 +64,8 @@
                         <td><button name="action" class="btn btn-warning" value="edit">Give manager role</button></td>
                     </tr>
                     counter += 1;
-                }
-        }
+              }
+         }
     }
     </tbody>
 </table>
