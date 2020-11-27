@@ -9,6 +9,7 @@ using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Sneaker_Bar.Services;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -16,16 +17,22 @@ namespace Sneaker_Bar.Controllers
     {
         SneakersRepository sneakersRepository;
         PurchaseRepository purchaseRepository;
-        CommentRepository commentRepository;
-        IWebHostEnvironment webHostEnvironment;
+        CommentRepository commentRepository; 
         UserManager<IdentityUser> userManager;
+        DateService dateService;
+        IWebHostEnvironment webHostEnvironment;
         ILogger<SneakersController> logger;
+        IMessageSender messageSender;
+
 
         public SneakersController(
             SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
             CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment,
-                    UserManager<IdentityUser> _userManager, ILogger<SneakersController> _logger)
+                    UserManager<IdentityUser> _userManager, DateService _dateService, 
+                    ILogger<SneakersController> _logger, IMessageSender _messageSender)
         {
+            dateService = _dateService;
+            messageSender = _messageSender;
             logger = _logger;
             userManager = _userManager;
             webHostEnvironment = _webHostEnvironment;
@@ -199,10 +206,10 @@ namespace Sneaker_Bar.Controllers
                 orderList.Add(sneakersRepository.GetSneakersById(purchase.SneakersId));
             }
         
-            MailService mailService = new MailService();
-            await mailService.SendEmailAsync(email, "Order confirmation message", BuildPreConfirmationMessage(email, totalPrice, orderList));
+            await messageSender.SendMessage(email, "Order confirmation message", BuildPreConfirmationMessage(email, totalPrice, orderList));
             return RedirectToAction("OrderConfirmation");
         }
+
         [HttpGet]
         public async System.Threading.Tasks.Task<IActionResult> OrderConfirmationAsync(Guid Id)
         {
@@ -213,8 +220,7 @@ namespace Sneaker_Bar.Controllers
                 foreach (Purchase purchase in purchases) {
                     purchaseRepository.DeletePurchase(purchase);
                 }
-                MailService mailService = new MailService();
-                await mailService.SendEmailAsync(email, "Order confirmation message", BuildConfirmationMessage(email));
+                await messageSender.SendMessage(email, "Order confirmation message", BuildConfirmationMessage(email));
             }
             return View();
         }
@@ -223,7 +229,7 @@ namespace Sneaker_Bar.Controllers
         private string BuildConfirmationMessage(string email) {
 
             string message = "<h1> <p>" + email + ", our order was successfully confrirmed!</p>\n";
-            message += "<p>Order date: " + DateTime.Now.ToString();
+            message += "<p>Order date: " + dateService.GetTime();
             return message;
         }
 
@@ -243,7 +249,7 @@ namespace Sneaker_Bar.Controllers
             }
             message += "</ol>";
 
-            message += "<p>Order date: " + DateTime.Now.ToString();
+            message += "<p>Order date: " + dateService.GetTime();
    
             message  += "<p><a href = \"" + Request.Scheme + "://" + Request.Host.Value + "/Sneakers/OrderConfirmation/" + Guid.Parse(userManager.GetUserId(HttpContext.User)) +
                 "\">Click this link to confirm your order!</ a >";

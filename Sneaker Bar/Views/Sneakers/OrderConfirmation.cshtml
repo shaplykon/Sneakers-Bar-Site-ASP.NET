@@ -1,4 +1,9 @@
-﻿@if (@Guid.Parse(ViewBag.PurchaseId) == Guid.Empty)
+﻿@{
+    ViewData["Title"] = "Order confirmed ";
+}
+
+
+@if (@Guid.Parse(ViewBag.PurchaseId) == Guid.Empty)
 {
     <h1>Follow the instruction in your email <a href="https://mail.google.com/mail/u/0/ "> @User.Identity.Name</a>!</h1>
 }

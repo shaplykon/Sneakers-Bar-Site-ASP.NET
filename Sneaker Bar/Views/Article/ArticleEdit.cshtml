@@ -1,4 +1,8 @@
 ﻿@model Sneaker_Bar.Models.Article
+@{
+    ViewData["Title"] = "Edit Article";
+}
+
 <div>
     <h1>Edit Article</h1>
 
@@ -18,7 +22,7 @@
                 <input type="text" class="form-control" asp-for="Text" />
             </div>
             <span asp-validation-for="Text"></span>
-        </div>     
+        </div>
 
 
         <div class="form-group row">

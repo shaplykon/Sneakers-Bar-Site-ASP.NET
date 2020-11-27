@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Hubs;
+using Sneaker_Bar.Services;
 
 namespace Sneaker_Bar
 {
@@ -25,8 +26,6 @@ namespace Sneaker_Bar
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
@@ -44,7 +43,8 @@ namespace Sneaker_Bar
             }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+            services.AddSingleton<IMessageSender, MailService>();
+            services.AddDateService();
             services.AddScoped<SneakersRepository>();
             services.AddScoped<ArticleRepository>();
             services.AddScoped<CommentRepository>();
@@ -52,9 +52,7 @@ namespace Sneaker_Bar
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

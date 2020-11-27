@@ -1,6 +1,9 @@
 ﻿@model Sneaker_Bar.Models.Comment
 @using Microsoft.AspNetCore.Identity;
 @inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager;
+@{
+    ViewData["Title"] = ViewBag.Article.Title;
+}
 
 <div class="row">
     <h1>@ViewBag.Article.Title</h1>
@@ -64,7 +67,7 @@
                         </div>
                         <p>@comment.Text</p>
 
-                        @{ if (User.Identity.IsAuthenticated && (comment.UserId == Guid.Parse(userManager.GetUserId(User)) || User.IsInRole("admin") || User.IsInRole("maanger")))
+                        @{ if (User.Identity.IsAuthenticated && (comment.UserId == Guid.Parse(userManager.GetUserId(User)) || User.IsInRole("admin") || User.IsInRole("manager")))
                             {
                                 <form method="post" asp-controller="Article" asp-action="DeleteComment" asp-route-articleId="@ViewBag.Article.Id" asp-route-commentId="@comment.Id">
                                     <input type="submit" value="Delete" class="btn btn-danger">

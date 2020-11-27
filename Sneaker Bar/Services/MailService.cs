@@ -1,15 +1,15 @@
-﻿using MailKit.Net.Smtp;
-using MimeKit;
+﻿using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MailKit.Net.Smtp;
 using System.Threading.Tasks;
 
-namespace Sneaker_Bar.Controllers
+namespace Sneaker_Bar.Services
 {
-    public class MailService
+    public class MailService : IMessageSender
     {
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendMessage(string email, string subject, string message)
         {
             var emailMessage = new MimeMessage();
 
@@ -31,4 +31,3 @@ namespace Sneaker_Bar.Controllers
         }
     }
 }
-
