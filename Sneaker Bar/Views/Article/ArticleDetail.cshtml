@@ -5,6 +5,13 @@
     ViewData["Title"] = ViewBag.Article.Title;
 }
 
+<script>
+    function getDate(utcDate) {
+        var date = new Date(utcDate);
+        document.getElementsByName('commentDateTime')[document.getElementsByName('commentDateTime').length - 1].innerText = "Date: " + date.toLocaleString();
+    }
+</script>
+
 <div class="row">
     <h1>@ViewBag.Article.Title</h1>
 </div>
@@ -13,7 +20,7 @@
 </div>
 
 <div class="row">
-    <img class="img-thumbnail" src="~/images/articles/@ViewBag.Article.ImageData"/>
+    <img class="img-thumbnail" src="~/images/articles/@ViewBag.Article.ImageData" />
 </div>
 
 <div class="row">
@@ -62,7 +69,16 @@
                     <div class="media-body">
                         <div class="mar-btm">
                             <a class="btn-link text-semibold media-heading box-inline">Username: @comment.AuthorName</a>
-                            <p class="text-muted text-sm">@comment.Date.ToShortDateString() :  @comment.Date.ToLocalTime().ToShortTimeString()</p>
+
+                            <p name="commentDateTime" class="text-muted text-sm">
+                                @comment.Date.ToString("yyyy-MM-ddTHH:mm:ssZ")
+                            </p>                        
+
+                            <script>
+                                var convertDate = document.getElementsByName('commentDateTime')[document.getElementsByName('commentDateTime').length - 1].innerText; 
+                                getDate(convertDate);
+                            </script>
+
                             <h4>@comment.Title</h4>
                         </div>
                         <p>@comment.Text</p>
