@@ -9,11 +9,11 @@
     <h1>@ViewBag.Article.Title</h1>
 </div>
 <div class="row">
-    <a>@ViewBag.Article.Date</a>
+    <a>@ViewBag.Article.Date.ToLocalTime()</a>
 </div>
 
 <div class="row">
-    <img class="img-thumbnail" src="~/images/articles/@ViewBag.Article.ImageData" />
+    <img class="img-thumbnail" src="~/images/articles/@ViewBag.Article.ImageData"/>
 </div>
 
 <div class="row">
@@ -62,7 +62,7 @@
                     <div class="media-body">
                         <div class="mar-btm">
                             <a class="btn-link text-semibold media-heading box-inline">Username: @comment.AuthorName</a>
-                            <p class="text-muted text-sm">@comment.Date.ToShortDateString() :  @comment.Date.ToShortTimeString()</p>
+                            <p class="text-muted text-sm">@comment.Date.ToShortDateString() :  @comment.Date.ToLocalTime().ToShortTimeString()</p>
                             <h4>@comment.Title</h4>
                         </div>
                         <p>@comment.Text</p>
