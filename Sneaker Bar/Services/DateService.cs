@@ -17,9 +17,8 @@ namespace Sneaker_Bar
 
     public class DateService
     {
-        private string Date { get; set; }
-        public DateService() => Date = DateTime.Now.ToString();
-        public string GetTime() => Date;
+        public string date { get; set; }
+        public DateService() => date = DateTime.Now.ToString();
     }
 
 }

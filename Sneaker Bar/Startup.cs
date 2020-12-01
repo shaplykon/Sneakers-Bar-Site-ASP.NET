@@ -44,7 +44,10 @@ namespace Sneaker_Bar
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSingleton<IMessageSender, MailService>();
+
             services.AddDateService();
+
+
             services.AddScoped<SneakersRepository>();
             services.AddScoped<ArticleRepository>();
             services.AddScoped<CommentRepository>();

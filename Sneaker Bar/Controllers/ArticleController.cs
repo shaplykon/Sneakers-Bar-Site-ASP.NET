@@ -54,7 +54,7 @@ namespace Sneaker_Bar.Controllers
                     Title = viewModel.Title,
                     Text = viewModel.Text,
                     UserId = Guid.Parse(userManager.GetUserId(HttpContext.User)),
-                    Date = DateTime.Now,
+                    Date = DateTime.UtcNow,
                     ImageData = uniqueFileName,
                     AuthorName = HttpContext.User.Identity.Name
                 };
@@ -102,11 +102,17 @@ namespace Sneaker_Bar.Controllers
             else { 
                 article = articleRepository.getArticleById(Id); 
             }
-
-
             article.Views++;
-            articleRepository.SaveArticle(article);
+            articleRepository.SaveArticle(article);     
+
+            article.Date = article.Date.ToLocalTime();
+
             List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();
+
+            foreach (Comment comment in comments) {
+                comment.Date = comment.Date.ToLocalTime();
+            }
+
             ViewBag.Article = article;
             ViewBag.Comments = comments;
             return View();
@@ -119,7 +125,7 @@ namespace Sneaker_Bar.Controllers
             if (ModelState.IsValid)
             {
                 Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
-                comment.Date = DateTime.Now;
+                comment.Date = DateTime.UtcNow;
                 comment.UserId = userId;
                 comment.AuthorName = HttpContext.User.Identity.Name;
                 commentRepository.SaveComment(comment);

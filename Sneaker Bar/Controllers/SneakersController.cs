@@ -229,7 +229,7 @@ namespace Sneaker_Bar.Controllers
         private string BuildConfirmationMessage(string email) {
 
             string message = "<h1> <p>" + email + ", our order was successfully confrirmed!</p>\n";
-            message += "<p>Order date: " + dateService.GetTime();
+            message += "<p>Order date: " + dateService.date;
             return message;
         }
 
@@ -238,7 +238,7 @@ namespace Sneaker_Bar.Controllers
         {
 
             string message = "<h1> <p>" + email + ", check your order information!</p>\n"
-                + " <p>Total price is " + totalPrice.ToString() + "$ (" + orderList.Count + " items)" + "</p>";
+                + "<p>Total price is " + totalPrice.ToString() + "$ (" + orderList.Count + " items)" + "</p>";
             message += "<ol>";
             foreach (Sneakers sneakers in orderList)
             {
@@ -249,7 +249,7 @@ namespace Sneaker_Bar.Controllers
             }
             message += "</ol>";
 
-            message += "<p>Order date: " + dateService.GetTime();
+            message += "<p>Order date: " + dateService.date;
    
             message  += "<p><a href = \"" + Request.Scheme + "://" + Request.Host.Value + "/Sneakers/OrderConfirmation/" + Guid.Parse(userManager.GetUserId(HttpContext.User)) +
                 "\">Click this link to confirm your order!</ a >";
