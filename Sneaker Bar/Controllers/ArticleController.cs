@@ -105,7 +105,13 @@ namespace Sneaker_Bar.Controllers
             article.Views++;
             articleRepository.SaveArticle(article);     
 
+            article.Date = article.Date.ToLocalTime();
+
             List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();
+
+            foreach (Comment comment in comments) {
+                comment.Date = comment.Date.ToLocalTime();
+            }
 
             ViewBag.Article = article;
             ViewBag.Comments = comments;
