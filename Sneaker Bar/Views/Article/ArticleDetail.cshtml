@@ -16,8 +16,14 @@
     <h1>@ViewBag.Article.Title</h1>
 </div>
 <div class="row">
-    <a>@ViewBag.Article.Date.ToLocalTime()</a>
+    <a id="articleDate">@ViewBag.Article.Date.ToString("yyyy-MM-ddTHH:mm:ssZ")</a>
 </div>
+
+<script>
+    var dateLabel = document.getElementById("articleDate");
+    var date = new Date(dateLabel.innerText);
+    dateLabel.innerText = "Date: " + date.toLocaleString();
+</script>
 
 <div class="row">
     <img class="img-thumbnail" src="~/images/articles/@ViewBag.Article.ImageData" />
@@ -72,10 +78,10 @@
 
                             <p name="commentDateTime" class="text-muted text-sm">
                                 @comment.Date.ToString("yyyy-MM-ddTHH:mm:ssZ")
-                            </p>                        
+                            </p>
 
                             <script>
-                                var convertDate = document.getElementsByName('commentDateTime')[document.getElementsByName('commentDateTime').length - 1].innerText; 
+                                var convertDate = document.getElementsByName('commentDateTime')[document.getElementsByName('commentDateTime').length - 1].innerText;
                                 getDate(convertDate);
                             </script>
 

@@ -45,7 +45,6 @@ namespace Sneaker_Bar.Model
             Comment comment = getCommentById(commentId);
             context.Comments.Remove(comment);
             context.SaveChanges();
-
         }
     }
 }

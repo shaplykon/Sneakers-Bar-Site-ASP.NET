@@ -11,8 +11,7 @@ namespace Sneaker_Bar.Controllers
 
         public HomeController(
             SneakersRepository _sneakersRepository, 
-            ArticleRepository _articleRepository,
-            ILogger<HomeController> logger)
+            ArticleRepository _articleRepository)
         {
             articleRepository = _articleRepository;
             sneakersRepository = _sneakersRepository;
@@ -20,10 +19,8 @@ namespace Sneaker_Bar.Controllers
 
         public ActionResult Index()
         {
-
             var Sneakers = sneakersRepository.GetSneakers();
             var Articles = articleRepository.getLatestArticles();
-      
             ViewBag.Sneakers = Sneakers;
             ViewBag.Articles = Articles;
             return View();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
@@ -10,6 +9,7 @@ using Sneaker_Bar.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Sneaker_Bar.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -22,14 +22,14 @@ namespace Sneaker_Bar.Controllers
         DateService dateService;
         IWebHostEnvironment webHostEnvironment;
         ILogger<SneakersController> logger;
-        IMessageSender messageSender;
+        IMailServicer messageSender;
 
 
         public SneakersController(
             SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
             CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment,
                     UserManager<IdentityUser> _userManager, DateService _dateService, 
-                    ILogger<SneakersController> _logger, IMessageSender _messageSender)
+                    ILogger<SneakersController> _logger, IMailServicer _messageSender)
         {
             dateService = _dateService;
             messageSender = _messageSender;
@@ -44,24 +44,8 @@ namespace Sneaker_Bar.Controllers
         [HttpGet]
         public IActionResult SneakersDetail(int Id)
         {
-            Sneakers sneakers;
-            if (webHostEnvironment.EnvironmentName.Equals("Production"))
-            {
-                try
-                {
-                    sneakers = sneakersRepository.GetSneakersById(Id);
-                }
-                catch (InvalidOperationException)
-                {
-                    logger.LogError("Error occured while trying to get sneakers with Id: {0}", Id);
-                    ViewBag.title = "Requsted sneakers were not found";
-                    ViewBag.message = "It is probably a mistake in your request";
-                    return View("Error");
-                }
-            }
-            else {
-                sneakers = sneakersRepository.GetSneakersById(Id);
-            }
+            Sneakers sneakers;   
+            sneakers = sneakersRepository.GetSneakersById(Id);
             ViewBag.sneakers = sneakers;
 
             if (User.Identity.IsAuthenticated)
@@ -93,7 +77,6 @@ namespace Sneaker_Bar.Controllers
             {
                 purchaseRepository.DeletePurchaseById(userId, sneakersId);
             }
-
             else
             {
                 purchaseRepository.SavePurchase(
@@ -113,6 +96,8 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ShoppingCart()
         {
             Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
+            // TODO Move to repository
+
             List<Purchase> purchases = purchaseRepository.GetPurchaseByUserId(userId).ToList();
             List<Sneakers> sneakers = new List<Sneakers>();
             double totalPrice = 0;
@@ -124,10 +109,8 @@ namespace Sneaker_Bar.Controllers
             }
             ViewBag.totalPrice = totalPrice;
             ViewBag.sneakers = sneakers;
-
             return View();
         }
-
    
         public IActionResult DeleteFromShoppingCart(int sneakersId)
         {
@@ -166,8 +149,6 @@ namespace Sneaker_Bar.Controllers
                 sneakersRepository.SaveSneakers(sneakers);
                 return RedirectToAction("Index", "Home");
             }
-
-
             return View((Sneakers)viewModel);
         }
 
@@ -198,15 +179,16 @@ namespace Sneaker_Bar.Controllers
 
         [HttpPost]
         public async System.Threading.Tasks.Task<IActionResult> ConfirmOrderAsync(double totalPrice) {
-            String email = User.Identity.Name;
-
+            string email = User.Identity.Name;
+            string hostUrl = Request.Scheme + "://" + Request.Host;
             List<Sneakers> orderList = new List<Sneakers>();
             List<Purchase> purchases = purchaseRepository.GetPurchaseByUserId(Guid.Parse(userManager.GetUserId(HttpContext.User)));
             foreach (Purchase purchase in purchases) {
                 orderList.Add(sneakersRepository.GetSneakersById(purchase.SneakersId));
             }
-        
-            await messageSender.SendMessage(email, "Order confirmation message", BuildPreConfirmationMessage(email, totalPrice, orderList));
+            string uid = Guid.Parse(userManager.GetUserId(HttpContext.User)).ToString();
+            await messageSender.SendMessage(email, "Order confirmation message", 
+                messageSender.BuildPreConfirmationMessage(email, dateService.date, orderList, hostUrl, uid));
             return RedirectToAction("OrderConfirmation");
         }
 
@@ -214,47 +196,17 @@ namespace Sneaker_Bar.Controllers
         public async System.Threading.Tasks.Task<IActionResult> OrderConfirmationAsync(Guid Id)
         {
             ViewBag.PurchaseId = Id.ToString();
-            String email = User.Identity.Name;
+            string email = User.Identity.Name;
             if (Id != Guid.Empty) {
                List<Purchase> purchases =  purchaseRepository.GetPurchaseByUserId(Guid.Parse(userManager.GetUserId(HttpContext.User)));
                 foreach (Purchase purchase in purchases) {
                     purchaseRepository.DeletePurchase(purchase);
                 }
-                await messageSender.SendMessage(email, "Order confirmation message", BuildConfirmationMessage(email));
+                await messageSender.SendMessage(email, "Order confirmation message",
+                    messageSender.BuildConfirmationMessage(email, dateService.date));
             }
-            return View();
-        }
-
-
-        private string BuildConfirmationMessage(string email) {
-
-            string message = "<h1> <p>" + email + ", our order was successfully confrirmed!</p>\n";
-            message += "<p>Order date: " + dateService.date;
-            return message;
-        }
-
-
-        private string BuildPreConfirmationMessage(string email, double totalPrice, List<Sneakers> orderList)
-        {
-
-            string message = "<h1> <p>" + email + ", check your order information!</p>\n"
-                + "<p>Total price is " + totalPrice.ToString() + "$ (" + orderList.Count + " items)" + "</p>";
-            message += "<ol>";
-            foreach (Sneakers sneakers in orderList)
-            {
-                message += "<li>";
-                message += sneakers.Company + " ";
-                message += sneakers.Model;
-                message += "</li>";
-            }
-            message += "</ol>";
-
-            message += "<p>Order date: " + dateService.date;
-   
-            message  += "<p><a href = \"" + Request.Scheme + "://" + Request.Host.Value + "/Sneakers/OrderConfirmation/" + Guid.Parse(userManager.GetUserId(HttpContext.User)) +
-                "\">Click this link to confirm your order!</ a >";
            
-            return message;
+            return View();
         }
     }
 }

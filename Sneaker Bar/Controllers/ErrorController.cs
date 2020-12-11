@@ -13,15 +13,20 @@ namespace Sneaker_Bar.Controllers
             logger = _logger;
         }
 
-        [Route("/Error/{statusCode}")]
-        public IActionResult Index(int statusCode)
+        [HttpGet("/Error")]
+        public IActionResult Error(int statusCode)
         {
+         
             var statusCodeResult = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+            this.HttpContext.Response.StatusCode = statusCode;
             switch (statusCode) {
                 case 404:
+                case 500:
                     logger.LogError($"Error {statusCode} occured. Path = {statusCodeResult.OriginalPath}" +
                         $" and QueryString= {statusCodeResult.OriginalQueryString}");
                     break;
+                default:
+                    return View("Error");
             }    
             return View($"Error-{statusCode}");
         }

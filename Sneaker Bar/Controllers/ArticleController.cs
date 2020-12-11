@@ -84,27 +84,11 @@ namespace Sneaker_Bar.Controllers
         [HttpGet]
         public IActionResult ArticleDetail(int Id)
         {
-            Article article;
-            if (webHostEnvironment.EnvironmentName.Equals("Production"))
-            {
-                try
-                {
-                    article = articleRepository.getArticleById(Id);
-                }
-                catch (Exception e)
-                {
-                    logger.LogError($"Error occured while trying to get article with Id: {Id}. Exception message: {e.Message}");
-                    ViewBag.title = "Requsted article were not found";
-                    ViewBag.message = "It is probably a mistake in your request";
-                    return View("Error");
-                }
-            }
-            else { 
-                article = articleRepository.getArticleById(Id); 
-            }
+            Article article = articleRepository.getArticleById(Id);   
             article.Views++;
             articleRepository.SaveArticle(article);     
             List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();
+
             ViewBag.Article = article;
             ViewBag.Comments = comments;
             return View();
@@ -136,9 +120,9 @@ namespace Sneaker_Bar.Controllers
         public IActionResult DeleteComment(int commentId, int articleId)
         {
             Article article = articleRepository.getArticleById(articleId);
-            article.CommentsAmount--;
             articleRepository.SaveArticle(article);
             commentRepository.DeleteCommentById(commentId);
+            article.CommentsAmount--;
             logger.LogWarning("Comment with Id {0} was deleted", commentId);
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
