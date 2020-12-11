@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Sneaker_Bar.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
+using Sneaker_Bar.Hubs;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -23,6 +25,7 @@ namespace Sneaker_Bar.Controllers
         IWebHostEnvironment webHostEnvironment;
         ILogger<SneakersController> logger;
         IMailServicer messageSender;
+
 
 
         public SneakersController(
@@ -42,7 +45,7 @@ namespace Sneaker_Bar.Controllers
         }
 
         [HttpGet]
-        public IActionResult SneakersDetail(int Id)
+        public IActionResult SneakersDetailAsync(int Id)
         {
             Sneakers sneakers;   
             sneakers = sneakersRepository.GetSneakersById(Id);
@@ -188,7 +191,7 @@ namespace Sneaker_Bar.Controllers
             }
             string uid = Guid.Parse(userManager.GetUserId(HttpContext.User)).ToString();
             await messageSender.SendMessage(email, "Order confirmation message", 
-                messageSender.BuildPreConfirmationMessage(email, dateService.date, orderList, hostUrl, uid));
+                messageSender.BuildPreConfirmationMessage(email, dateService.GetDate(), orderList, hostUrl, uid));
             return RedirectToAction("OrderConfirmation");
         }
 
@@ -203,7 +206,7 @@ namespace Sneaker_Bar.Controllers
                     purchaseRepository.DeletePurchase(purchase);
                 }
                 await messageSender.SendMessage(email, "Order confirmation message",
-                    messageSender.BuildConfirmationMessage(email, dateService.date));
+                    messageSender.BuildConfirmationMessage(email, dateService.GetDate()));
             }
            
             return View();

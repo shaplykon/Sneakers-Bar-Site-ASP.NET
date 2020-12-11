@@ -10,6 +10,7 @@ using Sneaker_Bar.Model;
 using Sneaker_Bar.Hubs;
 using Sneaker_Bar.Services;
 using Sneaker_Bar.Configuration;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Sneaker_Bar
 {
@@ -41,9 +42,8 @@ namespace Sneaker_Bar
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSingleton<IMailServicer, MailService>();
-
             services.AddDateService();
-
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();  
 
             services.AddScoped<SneakersRepository>();
             services.AddScoped<ArticleRepository>();

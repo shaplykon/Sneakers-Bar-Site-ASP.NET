@@ -36,9 +36,9 @@ hubConnection.on('Send', function (message) {
     });
 });
 
-function sendNotification(company, model) {
-    hubConnection.invoke("Send", company, model);
-}
+//function sendNotification(company, model) {
+//    hubConnection.invoke("Send", company, model);
+//}
 
 
 

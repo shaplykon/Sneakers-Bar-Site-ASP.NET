@@ -6,7 +6,7 @@
 
 <div>
     <h1>Edit Sneakers</h1>
-    <form method="post" onsubmit="Submit()"
+    <form method="post"
           asp-controller="Sneakers" asp-action="SneakersEdit"
           enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
@@ -66,11 +66,3 @@
     </form>
 
 </div>
-
-<script>
-    function Submit() {
-        let company = document.getElementById('company').value;
-        let model = document.getElementById('model').value;
-        sendNotification(company, model);
-    }
-</script>

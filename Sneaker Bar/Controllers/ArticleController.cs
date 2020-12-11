@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Sneaker_Bar.Hubs;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
 using Sneaker_Bar.ViewModels;
@@ -16,17 +18,21 @@ namespace Sneaker_Bar.Controllers
     {
         ArticleRepository articleRepository;
         CommentRepository commentRepository;
+        IHubContext<NotificationHub> notificationHub;
         private IWebHostEnvironment webHostEnvironment;
         private readonly UserManager<IdentityUser> userManager;
         private readonly ILogger<ArticleController> logger;
+
 
         public ArticleController(
             ArticleRepository _articleRepository,
             IWebHostEnvironment _webHostEnvironment,
             CommentRepository _commentRepository,
             UserManager<IdentityUser> _userManager,
-            ILogger<ArticleController> _logger)
+            ILogger<ArticleController> _logger,
+            IHubContext<NotificationHub> _notificationHub)
         {
+            notificationHub = _notificationHub;
             commentRepository = _commentRepository;
             articleRepository = _articleRepository;
             webHostEnvironment = _webHostEnvironment;
@@ -107,7 +113,10 @@ namespace Sneaker_Bar.Controllers
                 commentRepository.SaveComment(comment);
                 Article article = articleRepository.getArticleById(articleId);
                 article.CommentsAmount++;
-                articleRepository.SaveArticle(article);
+                articleRepository.SaveArticle(article);                    
+
+                notificationHub.Clients.User(article.AuthorName).SendAsync("Send", "User " + userManager.GetUserName(HttpContext.User) + " left comment to your article " + article.Title);
+
                 logger.LogInformation("Successfully added comment for article with Id {0}", articleId);
             }
             else {
@@ -115,7 +124,7 @@ namespace Sneaker_Bar.Controllers
             }
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
-        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "admin, manager")]
+
         [HttpPost]
         public IActionResult DeleteComment(int commentId, int articleId)
         {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Sneaker_Bar
@@ -16,8 +13,7 @@ namespace Sneaker_Bar
 
     public class DateService
     {
-        public string date { get; set; }
-        public DateService() => date = DateTime.Now.ToString();
+        public string GetDate() =>  DateTime.Now.ToLocalTime().ToString();
     }
 
 }
