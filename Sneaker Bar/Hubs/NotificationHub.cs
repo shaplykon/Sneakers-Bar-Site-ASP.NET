@@ -5,9 +5,6 @@ namespace Sneaker_Bar.Hubs
 {
     public class NotificationHub : Hub
     {
-        public void Func() { 
-        
-        }
 
     }
     public class CustomUserIdProvider : IUserIdProvider

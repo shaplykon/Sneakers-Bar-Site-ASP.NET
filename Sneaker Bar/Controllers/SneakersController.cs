@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Sneaker_Bar.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
-using Sneaker_Bar.Hubs;
 
 namespace Sneaker_Bar.Controllers
 {
@@ -24,7 +22,7 @@ namespace Sneaker_Bar.Controllers
         DateService dateService;
         IWebHostEnvironment webHostEnvironment;
         ILogger<SneakersController> logger;
-        IMailServicer messageSender;
+        IMailService messageSender;
 
 
 
@@ -32,7 +30,7 @@ namespace Sneaker_Bar.Controllers
             SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
             CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment,
                     UserManager<IdentityUser> _userManager, DateService _dateService, 
-                    ILogger<SneakersController> _logger, IMailServicer _messageSender)
+                    ILogger<SneakersController> _logger, IMailService _messageSender)
         {
             dateService = _dateService;
             messageSender = _messageSender;
@@ -99,8 +97,6 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ShoppingCart()
         {
             Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
-            // TODO Move to repository
-
             List<Purchase> purchases = purchaseRepository.GetPurchaseByUserId(userId).ToList();
             List<Sneakers> sneakers = new List<Sneakers>();
             double totalPrice = 0;

@@ -1,18 +1,13 @@
-﻿
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Sneaker_Bar.Configuration;
 using Sneaker_Bar.Models;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using MailKit.Net.Smtp;
-using System.Net.Mail;
 using MimeKit;
 
 namespace Sneaker_Bar.Services
 {
-    public class MailService : IMailServicer
+    public class MailService : IMailService
     {
         private readonly SmtpSettings _settings;
         public MailService(IOptions<SmtpSettings> options) {

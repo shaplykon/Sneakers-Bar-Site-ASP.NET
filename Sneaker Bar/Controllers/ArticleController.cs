@@ -25,12 +25,9 @@ namespace Sneaker_Bar.Controllers
 
 
         public ArticleController(
-            ArticleRepository _articleRepository,
-            IWebHostEnvironment _webHostEnvironment,
-            CommentRepository _commentRepository,
-            UserManager<IdentityUser> _userManager,
-            ILogger<ArticleController> _logger,
-            IHubContext<NotificationHub> _notificationHub)
+            ArticleRepository _articleRepository, IWebHostEnvironment _webHostEnvironment,
+            CommentRepository _commentRepository, UserManager<IdentityUser> _userManager,
+            ILogger<ArticleController> _logger, IHubContext<NotificationHub> _notificationHub)
         {
             notificationHub = _notificationHub;
             commentRepository = _commentRepository;
@@ -90,11 +87,9 @@ namespace Sneaker_Bar.Controllers
         [HttpGet]
         public IActionResult ArticleDetail(int Id)
         {
-            Article article = articleRepository.getArticleById(Id);   
-            article.Views++;
-            articleRepository.SaveArticle(article);     
-            List<Comment> comments = commentRepository.getCommentsByArticleId(article.Id).ToList();
-
+            Article article = articleRepository.getArticleById(Id);
+            List<Comment> comments = commentRepository.getCommentsByArticleId(Id).ToList();
+            articleRepository.AddViewById(Id);   
             ViewBag.Article = article;
             ViewBag.Comments = comments;
             return View();
@@ -106,17 +101,14 @@ namespace Sneaker_Bar.Controllers
         {
             if (ModelState.IsValid)
             {
+                Article article = articleRepository.getArticleById(articleId);
                 Guid userId = Guid.Parse(userManager.GetUserId(HttpContext.User));
                 comment.Date = DateTime.UtcNow;
                 comment.UserId = userId;
                 comment.AuthorName = HttpContext.User.Identity.Name;
-                commentRepository.SaveComment(comment);
-                Article article = articleRepository.getArticleById(articleId);
-                article.CommentsAmount++;
-                articleRepository.SaveArticle(article);                    
-
-                notificationHub.Clients.User(article.AuthorName).SendAsync("Send", "User " + userManager.GetUserName(HttpContext.User) + " left comment to your article " + article.Title);
-
+                commentRepository.SaveComment(comment, articleId);              
+                notificationHub.Clients.User(article.AuthorName).
+                    SendAsync("Send", "User " + userManager.GetUserName(HttpContext.User) + " left comment to your article " + article.Title);
                 logger.LogInformation("Successfully added comment for article with Id {0}", articleId);
             }
             else {
@@ -127,11 +119,8 @@ namespace Sneaker_Bar.Controllers
 
         [HttpPost]
         public IActionResult DeleteComment(int commentId, int articleId)
-        {
-            Article article = articleRepository.getArticleById(articleId);
-            articleRepository.SaveArticle(article);
-            commentRepository.DeleteCommentById(commentId);
-            article.CommentsAmount--;
+        {           
+            commentRepository.DeleteCommentById(commentId, articleId);
             logger.LogWarning("Comment with Id {0} was deleted", commentId);
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }

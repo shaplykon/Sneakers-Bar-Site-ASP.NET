@@ -41,9 +41,11 @@ namespace Sneaker_Bar
             }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddSingleton<IMailServicer, MailService>();
+
             services.AddDateService();
-            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();  
+        
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+            services.AddSingleton<IMailService, MailService>();
 
             services.AddScoped<SneakersRepository>();
             services.AddScoped<ArticleRepository>();
@@ -56,7 +58,7 @@ namespace Sneaker_Bar
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
+       
             if (env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();
@@ -64,6 +66,7 @@ namespace Sneaker_Bar
             }
             else if (env.IsEnvironment("Production"))
             {
+                app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
                 app.UseExceptionHandler("/Error/");
                 app.UseHsts();
             }

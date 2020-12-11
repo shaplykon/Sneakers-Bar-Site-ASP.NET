@@ -6,7 +6,7 @@
 }
 
 <script>
-    function getDate(utcDate) {
+    function setConvertedDate(utcDate) {
         var date = new Date(utcDate);
         document.getElementsByName('commentDateTime')[document.getElementsByName('commentDateTime').length - 1].innerText = "Date: " + date.toLocaleString();
     }
@@ -82,7 +82,7 @@
 
                             <script>
                                 var convertDate = document.getElementsByName('commentDateTime')[document.getElementsByName('commentDateTime').length - 1].innerText;
-                                getDate(convertDate);
+                                setConvertedDate(convertDate);
                             </script>
 
                             <h4>@comment.Title</h4>

@@ -10,8 +10,10 @@ namespace Sneaker_Bar.Model
     public class CommentRepository
     {
         private readonly ApplicationDbContext context;
-        public CommentRepository(ApplicationDbContext _context)
+        private readonly ArticleRepository articleRepository;
+        public CommentRepository(ApplicationDbContext _context, ArticleRepository _articleRepository)
         {
+            articleRepository = _articleRepository;
             context = _context;
         }
 
@@ -25,10 +27,13 @@ namespace Sneaker_Bar.Model
             return context.Comments.Where(x => x.Id == Id).FirstOrDefault();
         }
 
-        public int SaveComment(Comment comment)
+        public int SaveComment(Comment comment, int articleId)
         {
             if (comment.Id == default)
             {
+                Article article = articleRepository.getArticleById(articleId);
+                article.CommentsAmount++;
+                articleRepository.SaveArticle(article);
                 context.Entry(comment).State = EntityState.Added;
             }
             else
@@ -40,10 +45,13 @@ namespace Sneaker_Bar.Model
         }
 
 
-        public void DeleteCommentById(int commentId)
+        public void DeleteCommentById(int commentId, int articleId)
         {
             Comment comment = getCommentById(commentId);
             context.Comments.Remove(comment);
+            Article article = articleRepository.getArticleById(articleId);
+            article.CommentsAmount--;
+            articleRepository.SaveArticle(article);
             context.SaveChanges();
         }
     }

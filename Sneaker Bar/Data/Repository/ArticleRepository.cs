@@ -19,6 +19,12 @@ namespace Sneaker_Bar.Models
             articles.Reverse();
             return articles;
         }
+        public void AddViewById(int Id) {
+            Article article = getArticleById(Id);
+            article.Views++;
+            SaveArticle(article);
+        }
+
         public List<Article> getLatestArticles()
         {
             List<Article> articles = getArticles();
