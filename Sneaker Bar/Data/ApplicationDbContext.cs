@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sneaker_Bar.Models
 {
@@ -17,12 +13,10 @@ namespace Sneaker_Bar.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
            : base(options)
         {
-       //         Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder ModelBuilder)
         {
-
             base.OnModelCreating(ModelBuilder);
         }
     }

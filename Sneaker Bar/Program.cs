@@ -1,22 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using NLog.Web;
 
 namespace Sneaker_Bar
 {
     public class Program
-    {
-       
+    {       
         public static async Task Main(string[] args)
         {
             var logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
@@ -35,8 +29,6 @@ namespace Sneaker_Bar
                     logger.Error(ex, "An error occurred while seeding the database.");
                 }
             }
-
-
 
             host.Run();
         }

@@ -24,8 +24,6 @@ namespace Sneaker_Bar.Controllers
         ILogger<SneakersController> logger;
         IMailService messageSender;
 
-
-
         public SneakersController(
             SneakersRepository _sneakersRepository, PurchaseRepository _purchaseRepository,
             CommentRepository _commentRepository, IWebHostEnvironment _webHostEnvironment,

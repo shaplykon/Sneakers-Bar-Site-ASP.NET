@@ -29,8 +29,6 @@ namespace Sneaker_Bar.Controllers
                     return View("Error");
             }    
             return View($"Error-{statusCode}");
-        }
-
-      
+        }      
     }
 }

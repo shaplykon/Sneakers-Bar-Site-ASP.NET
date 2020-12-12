@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Sneaker_Bar.Hubs;
 using Sneaker_Bar.Model;
 using Sneaker_Bar.Models;
+using Sneaker_Bar.Services.UserConnections;
 using Sneaker_Bar.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,15 @@ namespace Sneaker_Bar.Controllers
         private IWebHostEnvironment webHostEnvironment;
         private readonly UserManager<IdentityUser> userManager;
         private readonly ILogger<ArticleController> logger;
-
+        private readonly IUserConnectionManager userConnectionManager;
 
         public ArticleController(
             ArticleRepository _articleRepository, IWebHostEnvironment _webHostEnvironment,
             CommentRepository _commentRepository, UserManager<IdentityUser> _userManager,
-            ILogger<ArticleController> _logger, IHubContext<NotificationHub> _notificationHub)
+            ILogger<ArticleController> _logger, IHubContext<NotificationHub> _notificationHub,
+            IUserConnectionManager _userConnectionManager)
         {
+            userConnectionManager = _userConnectionManager;
             notificationHub = _notificationHub;
             commentRepository = _commentRepository;
             articleRepository = _articleRepository;
@@ -67,23 +70,6 @@ namespace Sneaker_Bar.Controllers
             }
             return View((Article)viewModel);
         }
-        private string UploadedFile(ArticleViewModel viewModel)
-        {
-            string uniqueFileName = null;
-
-            if (viewModel.ImageData != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/articles");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.ImageData.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    viewModel.ImageData.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
-
         [HttpGet]
         public IActionResult ArticleDetail(int Id)
         {
@@ -106,9 +92,12 @@ namespace Sneaker_Bar.Controllers
                 comment.Date = DateTime.UtcNow;
                 comment.UserId = userId;
                 comment.AuthorName = HttpContext.User.Identity.Name;
-                commentRepository.SaveComment(comment, articleId);              
-                notificationHub.Clients.User(article.AuthorName).
-                    SendAsync("Send", "User " + userManager.GetUserName(HttpContext.User) + " left comment to your article " + article.Title);
+                commentRepository.SaveComment(comment, articleId);
+                if (!userConnectionManager.GetConnectionIdByName(article.AuthorName).Equals(string.Empty))
+                {
+                    notificationHub.Clients.Client(userConnectionManager.GetConnectionIdByName(article.AuthorName)).
+                       SendAsync("Send", "User " + userManager.GetUserName(HttpContext.User) + " left comment to your article " + article.Title);
+                }
                 logger.LogInformation("Successfully added comment for article with Id {0}", articleId);
             }
             else {
@@ -137,6 +126,22 @@ namespace Sneaker_Bar.Controllers
         public IActionResult ArticleDelete(int articleId) {
             articleRepository.DeleteArticle(articleRepository.getArticleById(articleId));
             return RedirectToAction("Index", "Home");
+        }
+        private string UploadedFile(ArticleViewModel viewModel)
+        {
+            string uniqueFileName = null;
+
+            if (viewModel.ImageData != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/articles");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.ImageData.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    viewModel.ImageData.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }

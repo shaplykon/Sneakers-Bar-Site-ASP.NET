@@ -11,6 +11,7 @@ using Sneaker_Bar.Hubs;
 using Sneaker_Bar.Services;
 using Sneaker_Bar.Configuration;
 using Microsoft.AspNetCore.SignalR;
+using Sneaker_Bar.Services.UserConnections;
 
 namespace Sneaker_Bar
 {
@@ -25,7 +26,8 @@ namespace Sneaker_Bar
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
-
+            services.AddDateService();
+            services.AddRepositories();
             services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("connectionString")));
 
@@ -42,15 +44,10 @@ namespace Sneaker_Bar
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-            services.AddDateService();
-        
+    
+            services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             services.AddSingleton<IMailService, MailService>();
-
-            services.AddScoped<SneakersRepository>();
-            services.AddScoped<ArticleRepository>();
-            services.AddScoped<CommentRepository>();
-            services.AddScoped<PurchaseRepository>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
