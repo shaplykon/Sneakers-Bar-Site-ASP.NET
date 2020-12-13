@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Sneaker_Bar.Services.UserConnections;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Sneaker_Bar.Hubs

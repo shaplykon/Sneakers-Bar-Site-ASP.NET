@@ -16,7 +16,6 @@ namespace Sneaker_Bar
             services.AddTransient<DateService>();
         }
 
-
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<SneakersRepository>();

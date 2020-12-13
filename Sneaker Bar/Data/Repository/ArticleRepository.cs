@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sneaker_Bar.Models
 {
@@ -19,12 +17,12 @@ namespace Sneaker_Bar.Models
             articles.Reverse();
             return articles;
         }
-        public void AddViewById(int Id) {
+        public void AddViewById(int Id)
+        {
             Article article = getArticleById(Id);
             article.Views++;
             SaveArticle(article);
         }
-
         public List<Article> getLatestArticles()
         {
             List<Article> articles = getArticles();

@@ -13,10 +13,9 @@ namespace Sneaker_Bar.Controllers
             logger = _logger;
         }
 
-        [HttpGet("/Error")]
+        [HttpGet("/Error/{statusCode}")]
         public IActionResult Error(int statusCode)
-        {
-         
+        {         
             var statusCodeResult = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
             this.HttpContext.Response.StatusCode = statusCode;
             switch (statusCode) {

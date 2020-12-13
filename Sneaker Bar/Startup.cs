@@ -63,7 +63,7 @@ namespace Sneaker_Bar
             }
             else if (env.IsEnvironment("Production"))
             {
-                app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseExceptionHandler("/Error/");
                 app.UseHsts();
             }
