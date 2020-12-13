@@ -26,9 +26,11 @@ namespace Sneaker_Bar
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+
             services.AddDateService();
             services.AddRepositories();
             services.AddSignalR();
+
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("connectionString")));
 
             services.AddDefaultIdentity<IdentityUser>(options =>
@@ -43,8 +45,6 @@ namespace Sneaker_Bar
             }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-    
             services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             services.AddSingleton<IMailService, MailService>();

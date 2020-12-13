@@ -1,4 +1,6 @@
-﻿function showNotification(title, options) {
+﻿
+
+function showNotification(title, options) {
     if (!("Notification" in window)) {
         alert('Ваш браузер не поддерживает HTML Notifications, его необходимо обновить.');
     }
@@ -22,24 +24,23 @@
     }
 }
 
-const hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl("/notification")
-    .build();
+$(document).ready(function () {
 
-hubConnection.start();
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/notification")
+        .build();
 
-hubConnection.on('Send', function (message) {
-    showNotification("Sneakers notification", {
-        body: message,
-        icon: src ="https://mir-s3-cdn-cf.behance.net/project_modules/1400/4e483087953183.5dc80d7a56dbc.png",
-        dir: 'auto'
+    hubConnection.on('Send', function (message) {
+        showNotification("Sneakers notification", {
+            body: message,
+            icon: src = "https://mir-s3-cdn-cf.behance.net/project_modules/1400/4e483087953183.5dc80d7a56dbc.png",
+            dir: 'auto'
+        });
     });
+
+    hubConnection.start();
+
+
 });
-
-//function sendNotification(company, model) {
-//    hubConnection.invoke("Send", company, model);
-//}
-
-
 
 

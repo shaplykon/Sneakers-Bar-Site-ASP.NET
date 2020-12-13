@@ -6,17 +6,25 @@ namespace Sneaker_Bar.Services.UserConnections
     public class UserConnectionManager : IUserConnectionManager
     {
         Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
+        static object locker = new object();
         public void ConnectUser(string username, string connectionId)
         {
-            if (!userConnections.ContainsKey(username))
+            lock (locker)
             {
-                userConnections[username] = new List<string>();
+                if (!userConnections.ContainsKey(username))
+                {
+                    userConnections[username] = new List<string>();
+                }
+                userConnections[username].Add(connectionId);
             }
-            userConnections[username].Add(connectionId);
         }
 
-        public void DisconnectUser(string username, string connectionId) {
-            userConnections[username].Remove(connectionId);
+        public void DisconnectUser(string username, string connectionId)
+        {
+            lock (locker)
+            {
+                userConnections[username].Remove(connectionId);
+            }
         }
 
         public string GetConnectionIdByName(string username)

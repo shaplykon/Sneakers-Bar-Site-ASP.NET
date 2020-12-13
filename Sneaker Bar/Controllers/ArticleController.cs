@@ -93,18 +93,16 @@ namespace Sneaker_Bar.Controllers
                 comment.UserId = userId;
                 comment.AuthorName = HttpContext.User.Identity.Name;
                 commentRepository.SaveComment(comment, articleId);
-                if (!userConnectionManager.GetConnectionIdByName(article.AuthorName).Equals(string.Empty))
-                {
-                    notificationHub.Clients.Client(userConnectionManager.GetConnectionIdByName(article.AuthorName)).
-                       SendAsync("Send", "User " + userManager.GetUserName(HttpContext.User) + " left comment to your article " + article.Title);
-                }
+                SendNotification(article);
                 logger.LogInformation("Successfully added comment for article with Id {0}", articleId);
+            
             }
             else {
                 logger.LogWarning("Incorrect comment input for article with Id {0}", articleId);
             }
             return RedirectToAction("ArticleDetail", "Article", new { Id = articleId });
         }
+
 
         [HttpPost]
         public IActionResult DeleteComment(int commentId, int articleId)
@@ -127,6 +125,7 @@ namespace Sneaker_Bar.Controllers
             articleRepository.DeleteArticle(articleRepository.getArticleById(articleId));
             return RedirectToAction("Index", "Home");
         }
+
         private string UploadedFile(ArticleViewModel viewModel)
         {
             string uniqueFileName = null;
@@ -143,5 +142,17 @@ namespace Sneaker_Bar.Controllers
             }
             return uniqueFileName;
         }
+
+        private void SendNotification(Article article)
+        {
+            string connectionId = userConnectionManager.GetConnectionIdByName(article.AuthorName);
+            string username = userManager.GetUserName(HttpContext.User);
+
+            if (!connectionId.Equals(string.Empty) && !article.AuthorName.Equals(username))
+            {
+                notificationHub.Clients.Client(connectionId).
+                   SendAsync("Send", "User " + username + " left comment to your article " + article.Title);
+            }
+        }   
     }
 }
